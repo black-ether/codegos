@@ -5,6 +5,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"go/scanner"
 	"go/token"
@@ -22,6 +23,8 @@ type Comment struct {
 	EndLine   int
 	Indent    int // Visual indentation columns; tabs count as 4-column tab stops.
 	Depth     int
+	Parent    *Comment
+	Next      *Comment // First following heading at the same or shallower indentation.
 	Children  []*Comment
 }
 
@@ -30,17 +33,32 @@ func main() {
 		usage()
 		return
 	}
-	path, targetLine, err := parseArgs(os.Args[1:])
+	options, err := parseArgs(os.Args[1:])
 	if err != nil {
 		usage()
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(2)
 	}
 
+	path := options.path
 	source, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error reading file:", err)
 		os.Exit(1)
+	}
+
+	lines := sourceLines(source)
+	if options.showEnd != 0 {
+		if options.showEnd > len(lines) {
+			fmt.Fprintf(os.Stderr, "error: range %d-%d exceeds file length (%d lines)\n", options.line, options.showEnd, len(lines))
+			os.Exit(1)
+		}
+		if options.format == "json" {
+			writeJSON(jsonOutput{File: path, TotalLines: len(lines), Mode: "show", Source: sourceRange(lines, options.line, options.showEnd)})
+		} else {
+			printLines(lines, options.line, options.showEnd, "", len(strconv.Itoa(len(lines))))
+		}
+		return
 	}
 
 	language, err := languageFromExtension(path)
@@ -55,50 +73,107 @@ func main() {
 		os.Exit(1)
 	}
 	tree := buildTree(comments)
+	width := lineNumberWidth(comments, len(lines))
 
-	if targetLine != 0 {
-		if err := printNavigation(path, source, comments, targetLine); err != nil {
+	if options.line != 0 {
+		if err := printNavigation(path, language, lines, comments, options, width); err != nil {
 			fmt.Fprintln(os.Stderr, "error:", err)
 			os.Exit(1)
 		}
 		return
 	}
 
-	fmt.Printf("Comment tree: %s (%s)\n\n", filepath.Base(path), language)
+	if options.format == "json" {
+		nodes := make([]headingJSON, 0, len(tree))
+		for _, node := range tree {
+			nodes = append(nodes, describeHeading(node, len(lines)))
+		}
+		writeJSON(jsonOutput{File: path, Language: language, TotalLines: len(lines), Mode: "outline", Headings: &nodes})
+		return
+	}
+	if options.format == "plain" {
+		fmt.Printf("%s (%s, %d lines)\n", filepath.Base(path), language, len(lines))
+		printLevel(tree, width, len(lines), true)
+		return
+	}
+	fmt.Printf("Comment tree: %s (%s, %d lines)\n\n", filepath.Base(path), language, len(lines))
 	if len(comments) == 0 {
 		fmt.Println("(No standalone comments found)")
 		return
 	}
-	printLevel(tree, "")
+	printLevel(tree, width, len(lines), false)
 }
 
 func usage() {
 	fmt.Fprintln(os.Stderr, `Usage:
-  codegos <source-file>
-  codegos <source-file> go <line-number>
+  codegos <source-file> [--plain | --json]
+  codegos <source-file> go <line-number> [--full] [--plain | --json]
+  codegos <source-file> show <start>-<end> [--plain | --json]
 
 Examples:
   go run . ./example.ps1
-  go run . ./example.py go 23
+  go run . ./example.py go 23 --full
+  go run . ./example.py show 23-40
 
 Supported extensions in this prototype: .go, .py, .ps1, .psm1, .psd1`)
 }
 
-func parseArgs(args []string) (string, int, error) {
+type cliOptions struct {
+	path    string
+	line    int
+	showEnd int
+	full    bool
+	format  string
+}
+
+func parseArgs(args []string) (cliOptions, error) {
 	if len(args) == 0 {
-		return "", 0, fmt.Errorf("missing source file")
+		return cliOptions{}, fmt.Errorf("missing source file")
+	}
+	options := cliOptions{path: args[0]}
+	for len(args) > 1 && strings.HasPrefix(args[len(args)-1], "--") {
+		flag := args[len(args)-1]
+		args = args[:len(args)-1]
+		switch flag {
+		case "--full":
+			if options.full {
+				return cliOptions{}, fmt.Errorf("--full can only be supplied once")
+			}
+			options.full = true
+		case "--plain", "--json":
+			if options.format != "" {
+				return cliOptions{}, fmt.Errorf("choose one output format")
+			}
+			options.format = strings.TrimPrefix(flag, "--")
+		default:
+			return cliOptions{}, fmt.Errorf("unknown option %q", flag)
+		}
+	}
+	if options.full && (len(args) != 3 || args[1] != "go") {
+		return cliOptions{}, fmt.Errorf("--full requires go <line-number>")
 	}
 	if len(args) == 1 {
-		return args[0], 0, nil
+		return options, nil
+	}
+	if len(args) == 3 && args[1] == "show" {
+		start, end, found := strings.Cut(args[2], "-")
+		from, startErr := strconv.Atoi(start)
+		to, endErr := strconv.Atoi(end)
+		if !found || startErr != nil || endErr != nil || from < 1 || to < from {
+			return cliOptions{}, fmt.Errorf("invalid line range %q: expected positive start-end with start <= end", args[2])
+		}
+		options.line, options.showEnd = from, to
+		return options, nil
 	}
 	if len(args) != 3 || args[1] != "go" {
-		return "", 0, fmt.Errorf("expected: codegos <source-file> [go <line-number>]")
+		return cliOptions{}, fmt.Errorf("expected go <line-number> [--full] or show <start>-<end>")
 	}
 	line, err := strconv.Atoi(args[2])
 	if err != nil || line < 1 {
-		return "", 0, fmt.Errorf("invalid line number %q", args[2])
+		return cliOptions{}, fmt.Errorf("invalid line number %q", args[2])
 	}
-	return args[0], line, nil
+	options.line = line
+	return options, nil
 }
 
 func languageFromExtension(path string) (string, error) {
@@ -497,14 +572,18 @@ func buildTree(comments []*Comment) []*Comment {
 
 	for _, comment := range comments {
 		for len(stack) > 0 && comment.Indent <= stack[len(stack)-1].Indent {
+			stack[len(stack)-1].Next = comment
 			stack = stack[:len(stack)-1]
 		}
 		comment.Depth = len(stack)
+		comment.Parent = nil
+		comment.Next = nil
 		comment.Children = nil
 		if len(stack) == 0 {
 			roots = append(roots, comment)
 		} else {
 			parent := stack[len(stack)-1]
+			comment.Parent = parent
 			parent.Children = append(parent.Children, comment)
 		}
 		stack = append(stack, comment)
@@ -513,27 +592,45 @@ func buildTree(comments []*Comment) []*Comment {
 }
 
 // printLevel prints only the nodes provided, never their descendants.
-// Line references remain at the end so their width does not affect indentation.
-func printLevel(nodes []*Comment, prefix string) {
+func printLevel(nodes []*Comment, width, sourceLineCount int, plain bool) {
 	for i, node := range nodes {
 		last := i == len(nodes)-1
 		connector := "├── "
 		if last {
 			connector = "└── "
 		}
+		if plain {
+			connector = ""
+		}
 		children := ""
 		if n := len(node.Children); n > 0 {
 			children = fmt.Sprintf(" (%d child%s)", n, pluralSuffix(n))
 		}
-		fmt.Printf("%s%s%s%s %s\n", prefix, connector, oneLine(node.Text), children, nodeLocation(node))
+		printRow(width, nodeLocation(node), connector+oneLine(node.Text)+children+blockLocation(node, blockEnd(node, sourceLineCount)))
 	}
+}
+
+func blockLocation(node *Comment, end int) string {
+	return fmt.Sprintf(" [block %d-%d]", node.StartLine, end)
 }
 
 func nodeLocation(node *Comment) string {
 	if node.EndLine > node.StartLine {
-		return fmt.Sprintf("[L:%d-%d]", node.StartLine, node.EndLine)
+		return fmt.Sprintf("%d-%d", node.StartLine, node.EndLine)
 	}
-	return fmt.Sprintf("[L:%d]", node.StartLine)
+	return strconv.Itoa(node.StartLine)
+}
+
+func lineNumberWidth(comments []*Comment, sourceLineCount int) int {
+	width := len(strconv.Itoa(sourceLineCount))
+	for _, node := range comments {
+		width = max(width, len(nodeLocation(node)))
+	}
+	return width
+}
+
+func printRow(width int, location, text string) {
+	fmt.Printf("%*s | %s\n", width, location, text)
 }
 
 func pluralSuffix(n int) string {
@@ -549,19 +646,14 @@ func oneLine(s string) string {
 
 // blockEnd returns the last line belonging to a navigation node, including
 // descendants, stopping at the next peer or ancestor comment.
-func blockEnd(comments []*Comment, index, sourceLineCount int) int {
-	target := comments[index]
-	end := sourceLineCount
-	for i := index + 1; i < len(comments); i++ {
-		if comments[i].Indent <= target.Indent {
-			end = comments[i].StartLine - 1
-			break
-		}
+func blockEnd(node *Comment, sourceLineCount int) int {
+	if node.Next != nil {
+		return node.Next.StartLine - 1
 	}
-	return end
+	return sourceLineCount
 }
 
-func printLines(lines []string, from, to int, prefix string) {
+func printLines(lines []string, from, to int, prefix string, width int) {
 	if from < 1 {
 		from = 1
 	}
@@ -569,35 +661,47 @@ func printLines(lines []string, from, to int, prefix string) {
 		to = len(lines)
 	}
 	for n := from; n <= to; n++ {
-		fmt.Printf("%s%5d | %s\n", prefix, n, lines[n-1])
+		printRow(width, strconv.Itoa(n), prefix+lines[n-1])
 	}
 }
 
 // printNavigation reveals one level. Short children may show their code, but
 // grandchildren are not expanded. Long leaf blocks get a bounded preview.
-func printNavigation(path string, source []byte, comments []*Comment, targetLine int) error {
-	index := -1
-	for i, node := range comments {
-		if node.StartLine == targetLine {
-			index = i
+func printNavigation(path, language string, lines []string, comments []*Comment, options cliOptions, width int) error {
+	var target *Comment
+	for _, node := range comments {
+		if node.StartLine == options.line {
+			target = node
 			break
 		}
 	}
-	if index < 0 {
-		return fmt.Errorf("no comment starts at L:%d; run Codegos without go to list roots", targetLine)
+	if target == nil {
+		return fmt.Errorf("no comment starts at L:%d; run Codegos without go to list roots", options.line)
 	}
 
-	const shortBlockLines = 4
-	const fullLeafLines = 29
-	const previewLines = 8
-	lines := sourceLines(source)
-	target := comments[index]
-	end := blockEnd(comments, index, len(lines))
+	end := blockEnd(target, len(lines))
+	if options.format == "json" {
+		writeJSON(navigationJSON(path, language, lines, target, options.full))
+		return nil
+	}
+	if options.full {
+		printLines(lines, target.StartLine, end, "", len(strconv.Itoa(len(lines))))
+		return nil
+	}
 	span := end - target.StartLine + 1
-	fmt.Printf("%s — %s (%d lines) %s\n", filepath.Base(path), oneLine(target.Text), span, nodeLocation(target))
+	plain := options.format == "plain"
+	if !plain {
+		fmt.Printf("%s\n\n", filepath.Base(path))
+	}
+	if len(target.Children) == 0 && target.Parent != nil {
+		printRow(width, nodeLocation(target.Parent), "Parent: "+oneLine(target.Parent.Text))
+	}
+	printRow(width, nodeLocation(target), fmt.Sprintf("%s (%d lines)%s", oneLine(target.Text), span, blockLocation(target, end)))
 
 	if len(target.Children) > 0 {
-		fmt.Printf("\n%d immediate children:\n", len(target.Children))
+		if !plain {
+			fmt.Printf("\n%d immediate children:\n", len(target.Children))
+		}
 		for i, child := range target.Children {
 			connector := "├── "
 			bodyPrefix := "│   "
@@ -605,14 +709,11 @@ func printNavigation(path string, source []byte, comments []*Comment, targetLine
 				connector = "└── "
 				bodyPrefix = "    "
 			}
-			childIndex := -1
-			for j, node := range comments {
-				if node == child {
-					childIndex = j
-					break
-				}
+			if plain {
+				connector = "  "
+				bodyPrefix = "    "
 			}
-			childEnd := blockEnd(comments, childIndex, len(lines))
+			childEnd := blockEnd(child, len(lines))
 			childSpan := childEnd - child.StartLine + 1
 			label := ""
 			if n := len(child.Children); n > 0 {
@@ -620,9 +721,9 @@ func printNavigation(path string, source []byte, comments []*Comment, targetLine
 			} else {
 				label = fmt.Sprintf(" (%d lines)", childSpan)
 			}
-			fmt.Printf("%s%s%s %s\n", connector, oneLine(child.Text), label, nodeLocation(child))
+			printRow(width, nodeLocation(child), connector+oneLine(child.Text)+label+blockLocation(child, childEnd))
 			if childSpan <= shortBlockLines && len(child.Children) == 0 {
-				printLines(lines, child.EndLine+1, childEnd, bodyPrefix)
+				printLines(lines, child.EndLine+1, childEnd, bodyPrefix, width)
 			}
 		}
 		return nil
@@ -631,18 +732,120 @@ func printNavigation(path string, source []byte, comments []*Comment, targetLine
 	start := target.EndLine + 1
 	if start > end {
 		fmt.Println("(No source lines in this block)")
-		return nil
+	} else {
+		last, omitted := leafPreview(start, end)
+		if omitted > 0 && !plain {
+			fmt.Printf("\nSource preview (first %d of %d lines):\n", previewLines, end-start+1)
+		}
+		printLines(lines, start, last, "", width)
+		if omitted > 0 {
+			fmt.Printf("... %d more lines omitted\n", omitted)
+		}
 	}
-	bodyLines := end - start + 1
-	if bodyLines <= fullLeafLines {
-		fmt.Println("\nSource:")
-		printLines(lines, start, end, "")
-		return nil
+	if target.Next != nil {
+		printRow(width, nodeLocation(target.Next), "Next: "+oneLine(target.Next.Text))
 	}
-	fmt.Printf("\nSource preview (first %d of %d lines):\n", previewLines, bodyLines)
-	printLines(lines, start, start+previewLines-1, "")
-	fmt.Printf("... %d more lines omitted\n", bodyLines-previewLines)
 	return nil
+}
+
+const (
+	shortBlockLines = 4
+	fullLeafLines   = 29
+	previewLines    = 8
+)
+
+func leafPreview(start, end int) (last, omitted int) {
+	if end-start+1 <= fullLeafLines {
+		return end, 0
+	}
+	last = start + previewLines - 1
+	return last, end - last
+}
+
+type headingJSON struct {
+	Text       string     `json:"text"`
+	StartLine  int        `json:"start_line"`
+	EndLine    int        `json:"end_line"`
+	BlockEnd   int        `json:"block_end"`
+	ChildCount int        `json:"child_count"`
+	Source     []lineJSON `json:"source,omitempty"`
+}
+
+type lineJSON struct {
+	Line int    `json:"line"`
+	Text string `json:"text"`
+}
+
+type jsonOutput struct {
+	File         string         `json:"file"`
+	Language     string         `json:"language,omitempty"`
+	TotalLines   int            `json:"total_lines"`
+	Mode         string         `json:"mode"`
+	Full         bool           `json:"full,omitempty"`
+	Headings     *[]headingJSON `json:"headings,omitempty"`
+	Selected     *headingJSON   `json:"selected,omitempty"`
+	Parent       *headingJSON   `json:"parent,omitempty"`
+	Next         *headingJSON   `json:"next,omitempty"`
+	Children     []headingJSON  `json:"children,omitempty"`
+	Source       []lineJSON     `json:"source,omitempty"`
+	OmittedLines int            `json:"omitted_lines,omitempty"`
+}
+
+func describeHeading(node *Comment, totalLines int) headingJSON {
+	return headingJSON{
+		Text: oneLine(node.Text), StartLine: node.StartLine, EndLine: node.EndLine,
+		BlockEnd: blockEnd(node, totalLines), ChildCount: len(node.Children),
+	}
+}
+
+func sourceRange(lines []string, start, end int) []lineJSON {
+	var source []lineJSON
+	for n := start; n <= end; n++ {
+		source = append(source, lineJSON{Line: n, Text: lines[n-1]})
+	}
+	return source
+}
+
+func navigationJSON(path, language string, lines []string, target *Comment, full bool) jsonOutput {
+	total := len(lines)
+	selected := describeHeading(target, total)
+	out := jsonOutput{File: path, Language: language, TotalLines: total, Mode: "go", Full: full, Selected: &selected}
+	if full {
+		out.Source = sourceRange(lines, target.StartLine, selected.BlockEnd)
+		return out
+	}
+	if len(target.Children) > 0 {
+		for _, child := range target.Children {
+			heading := describeHeading(child, total)
+			if heading.ChildCount == 0 && heading.BlockEnd-child.StartLine+1 <= shortBlockLines {
+				heading.Source = sourceRange(lines, child.EndLine+1, heading.BlockEnd)
+			}
+			out.Children = append(out.Children, heading)
+		}
+		return out
+	}
+	if target.Parent != nil {
+		parent := describeHeading(target.Parent, total)
+		out.Parent = &parent
+	}
+	if target.Next != nil {
+		next := describeHeading(target.Next, total)
+		out.Next = &next
+	}
+	start := target.EndLine + 1
+	last, omitted := leafPreview(start, selected.BlockEnd)
+	out.Source = sourceRange(lines, start, last)
+	out.OmittedLines = omitted
+	return out
+}
+
+func writeJSON(out jsonOutput) {
+	encoder := json.NewEncoder(os.Stdout)
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(out); err != nil {
+		fmt.Fprintln(os.Stderr, "error writing JSON:", err)
+		os.Exit(1)
+	}
 }
 
 // --- Small shared utilities ----------------------------------------------
