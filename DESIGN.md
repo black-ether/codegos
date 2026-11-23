@@ -2,8 +2,9 @@
 
 Working name: becv-next (placeholder — rename before first build).
 Lineage: Black-Ether Code Visualizer / becv comment companion.
-Reference sources copied to `reference\` (originals untouched in
-`C:\Users\ncode\scripts\Black-Ether Code Visualizer`).
+Reference sources live outside this repo, at
+`C:\Users\ncode\scripts\codegos-reference\` (originals untouched in
+`C:\Users\ncode\scripts\Black-Ether Code Visualizer\`).
 Status: settling what it does before choosing final scope/language. Go is the
 leaning (toolchain confirmed on host: go1.24.0 windows/amd64).
 
@@ -95,12 +96,12 @@ M3. Only if a consumer exists: JSON, --inline, @n fetch, AST signature fallback.
 ## Test corpus (verified present)
 
 - D:\desktop\archivbe\Untitled-40.ps1  <- the user's example source (numbered comments)
-- reference\test_comments.ps1          <- block/inline edge cases
-- reference\cleanmycode.ps1            <- small real script
-- reference\Modules\ScriptAnalysisUtils.psm1 <- 80KB stress case (token math)
+- ..\codegos-reference\test_comments.ps1          <- block/inline edge cases
+- ..\codegos-reference\cleanmycode.ps1            <- small real script
+- ..\codegos-reference\Modules\ScriptAnalysisUtils.psm1 <- 80KB stress case (token math)
 - any seermon .go file                 <- proves language-agnostic extraction
 
-## Reference map (what to read in reference\)
+## Reference map (what to read in ..\codegos-reference\)
 
 - becv.ps1 — the companion being rewritten: ListComments/Tree/Markdown modes,
   -ShowLineNumbers, -ShowCodeAroundLine, -SpacesPerLevel, -Raw. Behavior to port.
