@@ -1,0 +1,24 @@
+     2453 | region SET COMMAND (107 lines) [block 2453-2559]
+     2456 |   --- Logic for setting/updating condition --- (3 lines) [block 2456-2458]
+     2457 |                 $groupNameForMsg = $null # For messages
+     2458 |     
+     2459 |   1. Determine Target Command CSV File (11 lines) [block 2459-2469]
+     2470 |   2. Check if CSV exists (7 lines) [block 2470-2476]
+     2477 |   3. Import the CSV data (1 child) [block 2477-2487]
+     2488 |   Handle potentially empty CSV after import (3 lines) [block 2488-2490]
+     2489 |                 if ($null -eq $commands) { $commands = @() } # Ensure it's an empty array, not null
+     2490 |     
+2491-2492 |   4. Find the command by CustomName (case-sensitive match for reliability) If you want case-insensitive, use: -eq $Name (4 lines) [block 2491-2494]
+     2493 |                 $commandToUpdate = $commands | Where-Object { $_.CustomName -ceq $Name } # Use -ceq for case-sensitive
+     2494 |     
+     2495 |   5. Handle if command not found (6 lines) [block 2495-2500]
+     2501 |   Note: Assuming no duplicates due to 'add' overwriting. If duplicates were possible, check $commandToUpdate.Count here. (2 lines) [block 2501-2502]
+     2502 |     
+     2503 |   6. Ensure 'Condition' Column exists in the data (2 children) [block 2503-2521]
+     2522 |   7. Update the Condition property for the target command (10 lines) [block 2522-2531]
+     2532 |   8. Export the modified data back to CSV (2 children) [block 2532-2554]
+     2555 |   --- End logic for Set Condition --- (3 lines) [block 2555-2557]
+     2556 |             } else {
+     2557 |                 Write-Error "Unsupported parameter combination for the 'set' command."
+     2558 |   Add more 'elseif ($PSCmdlet.ParameterSetName -eq ...)' here for future 'set' operations (2 lines) [block 2558-2559]
+     2559 |             }

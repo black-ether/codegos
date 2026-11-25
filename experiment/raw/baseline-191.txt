@@ -1,0 +1,8 @@
+      191 | T1|2 Main Command Processing (2376 lines) [block 191-2566]
+      198 |   region [T2|A. ADD COMMAND] (5 lines) [block 198-202]
+      203 |   region T2(-H1Aa(- Command Logic (3 children) [block 203-308]
+  309-310 |   endregion region Ab: Add Path Mapping (via -Path and optionally -Name/-Group) (Execution) (14 children) [block 309-486]
+      487 |   endregion ADD CASE (2 lines) [block 487-488]
+      488 |     
+      489 |   Mode: Handle Unrecognized Parameter Set (Error Handling) (5 lines) [block 489-493]
+      494 |   endregion i. ADD COMMAND (60 children) [block 494-2566]

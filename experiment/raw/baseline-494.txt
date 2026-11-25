@@ -1,0 +1,102 @@
+      494 | endregion i. ADD COMMAND (2073 lines) [block 494-2566]
+      497 |   region B LIST COMMAND (3 lines) [block 497-499]
+      498 |             Write-Debug "DEBUG: List command detected. Set: $($PSCmdlet.ParameterSetName)"
+      499 |             if ($ListCommands) {
+      500 |   This block determines WHICH files to process and puts them in $filesToProcess (4 children) [block 500-581]
+      582 |   Loop through all the files identified earlier (either all CSVs or just the specific group CSV) (2 children) [block 582-655]
+      656 |   --- Check if *any* valid commands were found across all processed files --- (2 children) [block 656-667]
+  668-669 |   --- Update Global Variables --- Store the accumulated, indexed list (now including SourceFile) (4 lines) [block 668-671]
+      670 |             $global:LastListedPaths = $processedCommandData
+      671 |             $global:LastListSource = 'powerpath_commands' # Source name indicates command listing
+      672 |   Store all *successfully* processed file paths, joined by a semicolon (5 lines) [block 672-676]
+      677 |   4. Format and Display Commands (4 children) [block 677-704]
+  705-706 |   # --- end main command processing logic --- endregion (4 lines) [block 705-708]
+      707 |         
+      708 |             } else {
+  709-711 |   region Path Listing Logic --- Determine Effective Color Mode --- Priority: Command-line parameter -> Config file -> Default (1) (4 children) [block 709-747]
+      748 |   --- Save Config if it was Updated --- (1 child) [block 748-777]
+      778 |   --- Cache Handling --- (8 lines) [block 778-785]
+      786 |   --- End Cache Handling --- (6 lines) [block 786-791]
+      792 |   --- Main Listing Loop --- (4 children) [block 792-863]
+  864-865 |   --- Cache Cleanup --- Remove entries from the cache that are no longer in the current listing for this group (9 lines) [block 864-872]
+      873 |   --- End of Cache Cleanup --- (1 child) [block 873-878]
+      879 |   region REMOVE COMMAND (5 lines) [block 879-883]
+  884-885 |   ---=== PRE-CHECKS ===--- 1. Check if the last list operation was actually 'powerpath list' or 'powerpath list -lc' (7 lines) [block 884-890]
+      891 |   Store whether we're removing a path or command (4 lines) [block 891-894]
+      892 |             $removalType = $global:LastListSource
+      893 |             Write-Debug "Removal type: $removalType"
+      894 |     
+      895 |   2. Check if the list and source file info exist (5 lines) [block 895-899]
+      900 |   Get the list content from globals (3 lines) [block 900-902]
+      901 |             $mappings = [System.Collections.Generic.List[object]]@($global:LastListedPaths)
+      902 |     
+      903 |   Check Index validity against the retrieved list (3 lines) [block 903-905]
+      904 |             if ($Index -gt $mappings.Count) { Write-Error "Index $Index out of range. List contains $($mappings.Count) items."; break }
+      905 |     
+      906 |   Find the specific item to remove from the list based on Index (4 lines) [block 906-909]
+      907 |             $mappingToRemove = $mappings | Where-Object { $_.Index -eq $Index } | Select-Object -First 1
+      908 |             if ($null -eq $mappingToRemove) { Write-Error "Could not find item for index $Index in the last listed results."; break }
+      909 |     
+      910 |   --- Get key details from the mapping to remove --- (3 children) [block 910-937]
+      938 |   Initial Debug Log - uses correctly derived values (2 lines) [block 938-939]
+      939 |             Write-Debug "Details identified for removal: Content='$contentToRemove', CustomName='$nameToRemove'"
+      940 |   --- End Get key details --- (2 lines) [block 940-941]
+      941 |     
+  942-943 |   ---=== Determine the Correct Target Data File ===--- Initialize variable to hold the single target file path (4 children) [block 942-979]
+      980 |   ---=== End Target Data File Determination ===--- (2 lines) [block 980-981]
+      981 |     
+      982 |   Wrap core logic in Try/Catch for better error handling (14 children) [block 982-1219]
+     1220 |   This is the main Try block's catch (2 children) [block 1220-1226]
+     1227 |   endregion REMOVE COMMAND (3 lines) [block 1227-1229]
+     1228 |         }
+     1229 |         'rename' {
+     1230 |   region RENAME COMMAND (3 lines) [block 1230-1232]
+     1231 |             Write-Debug "DEBUG: Rename command detected. Set: $($PSCmdlet.ParameterSetName)"
+     1232 |     
+     1233 |   --- Initial Parameter Validation --- (5 lines) [block 1233-1237]
+1238-1239 |   ---=== PRE-CHECKS ===--- 1. Check if the last list operation was valid (10 lines) [block 1238-1247]
+     1248 |   2. Check if the list data exists (5 lines) [block 1248-1252]
+     1253 |   Check required file info exists for paths (6 lines) [block 1253-1258]
+     1259 |   Get the list content from globals (3 lines) [block 1259-1261]
+     1260 |             $mappings = [System.Collections.Generic.List[object]]@($global:LastListedPaths)
+     1261 |     
+     1262 |   Check Index validity AFTER getting mappings (3 lines) [block 1262-1264]
+     1263 |             if ($Index -gt $mappings.Count) { Write-Error "Index $Index out of range. List contains $($mappings.Count) items."; break }
+     1264 |     
+     1265 |   Find the specific item to rename (4 lines) [block 1265-1268]
+     1266 |             $oldMapping = $mappings | Where-Object { $_.Index -eq $Index } | Select-Object -First 1
+     1267 |             if ($null -eq $oldMapping) { Write-Error "Could not find item for index $Index in the last listed results."; break }
+     1268 |     
+     1269 |   --- Name Conflict Validation --- (2 children) [block 1269-1303]
+     1304 |   Check against Global/Env variables (7 lines) [block 1304-1310]
+     1311 |   --- End Name Conflict Validation --- (2 lines) [block 1311-1312]
+     1312 |     
+     1313 |   Wrap core rename logic in Try/Catch (7 children) [block 1313-1637]
+     1638 |   endregion RENAME COMMAND (3 lines) [block 1638-1640]
+     1639 |         } 
+     1640 |         'run' {
+1641-1645 |   ------------------------------------------------------------- Command Object Structure (Blueprint) ------------------------------------------------------------- This defines the standard object structure we will use to store the outcome of executing each command. (6 lines) [block 1641-1646]
+1647-1661 |   [PSCustomObject]@{ OriginalIndex = $index # Integer: 1-based index from the original CSV ListName = $listName # String: Name of the command list CommandString = $commandString # String: The actual command executed CustomName = $customName # String: User-defined name or CommandString RuntimeIndex = 1 # Integer: Which iteration this is (for future -Repeat feature, defaults to 1) Status = 'NotRun' | 'Success' | 'Failure' | 'Skipped' # String: Execution outcome StartTime = $null # DateTime: When execution started EndTime = $null # DateTime: When execution finished Duration = $null # TimeSpan: Total execution time Output = $null # String[] or String: Captured StdOut/StdErr ErrorRecord = $null # System.Management.Automation.ErrorRecord: Error details if Status='Failure' ExecutedInParallel = $false # Boolean: Whether it ran via ForEach-Object -Parallel } ------------------------------------------------------------- (16 lines) [block 1647-1662]
+     1663 |   region RUN COMMAND (2 lines) [block 1663-1664]
+     1664 |             Write-Debug "DEBUG: Run command detected. Set: $($PSCmdlet.ParameterSetName)"
+     1665 |   --- Get Inputs from Parameters --- (16 lines) [block 1665-1680]
+     1681 |   --- End Get Inputs --- (2 lines) [block 1681-1682]
+     1682 |     
+     1683 |   --- Determine Iteration Count --- (10 lines) [block 1683-1692]
+     1693 |   --- End Determine Iteration Count --- (2 lines) [block 1693-1694]
+     1694 |     
+     1695 |   --- Resolve Inputs into Actions --- (6 children) [block 1695-1745]
+     1746 |   --- End Resolve Inputs --- (2 lines) [block 1746-1747]
+     1747 |     
+     1748 |   --- Main Execution --- (5 lines) [block 1748-1752]
+     1753 |   Determine if this is a single command variable run (4 children) [block 1753-2336]
+     2337 |   --- Final Report Generation --- (2 lines) [block 2337-2338]
+     2338 |         if (-not $isSingleCommandRun) {
+     2339 |   Write-Host "`n--- Command Status Report ---" -ForegroundColor Cyan (1 child) [block 2339-2447]
+     2448 |   Write-Host "-----------------------------" -ForegroundColor Cyan (2 lines) [block 2448-2449]
+     2449 |         }
+     2450 |   endregion (3 lines) [block 2450-2452]
+     2451 |         }
+     2452 |         'set' { 
+     2453 |   region SET COMMAND (13 children) [block 2453-2559]
+     2560 |   endregion (7 lines) [block 2560-2566]

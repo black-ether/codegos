@@ -1,0 +1,8 @@
+      494 | Parent: endregion i. ADD COMMAND
+     2560 | endregion (7 lines) [block 2560-2566]
+     2561 |     }
+     2562 |     'help' {
+     2563 |         Show-Help
+     2564 |         exit 0
+     2565 |     }
+     2566 | }
