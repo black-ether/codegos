@@ -18,6 +18,8 @@ import (
 // Comment is a comment node in the navigation tree.
 // StartLine and EndLine are 1-based source line numbers.
 type Comment struct {
+	directive string
+	rangeEnd  int
 	Text      string
 	StartLine int
 	EndLine   int
@@ -73,6 +75,13 @@ func main() {
 		os.Exit(1)
 	}
 	tree := buildTree(comments)
+	visible := comments[:0]
+	for _, c := range comments {
+		if c.directive != "endregion" {
+			visible = append(visible, c)
+		}
+	}
+	comments = visible
 	width := lineNumberWidth(comments, len(lines))
 
 	if options.line != 0 {
@@ -211,7 +220,7 @@ func groupAdjacentComments(nodes []*Comment) []*Comment {
 	for _, node := range nodes {
 		if len(grouped) > 0 {
 			prev := grouped[len(grouped)-1]
-			if prev.Indent == node.Indent && prev.EndLine+1 == node.StartLine {
+			if prev.directive == "" && node.directive == "" && prev.Indent == node.Indent && prev.EndLine+1 == node.StartLine {
 				prev.Text += " " + node.Text
 				prev.EndLine = node.EndLine
 				continue
@@ -519,6 +528,7 @@ func extractPowerShellComments(source []byte) []*Comment {
 					text := strings.TrimSpace(line[i+1:])
 					if text != "" {
 						comments = append(comments, &Comment{
+							directive: powerShellDirective(line[i+1:]),
 							Text:      text,
 							StartLine: lineNo,
 							EndLine:   lineNo,
@@ -566,12 +576,54 @@ func consumePowerShellQuoted(line string, start int, quote byte) (closed bool, n
 }
 
 // --- Shared hierarchy and display -----------------------------------------
+// PowerShell folding markers start immediately after the comment delimiter.
+func powerShellDirective(body string) string {
+	word, _, _ := strings.Cut(strings.ToLower(strings.ReplaceAll(body, "\t", " ")), " ")
+	if word == "region" || word == "endregion" {
+		return word
+	}
+	return ""
+}
+
 func buildTree(comments []*Comment) []*Comment {
 	roots := make([]*Comment, 0)
 	stack := make([]*Comment, 0)
 
+	// Pair first so an unfinished region cannot swallow the rest of the file.
+	pairs := map[*Comment]*Comment{}
+	var opens []*Comment
+	for _, c := range comments {
+		switch c.directive {
+		case "region":
+			opens = append(opens, c)
+		case "endregion":
+			if len(opens) > 0 {
+				open := opens[len(opens)-1]
+				pairs[open] = c
+				opens = opens[:len(opens)-1]
+			}
+		}
+	}
+	var floors []int
 	for _, comment := range comments {
-		for len(stack) > 0 && comment.Indent <= stack[len(stack)-1].Indent {
+		floor := 0
+		if len(floors) > 0 {
+			floor = floors[len(floors)-1]
+		}
+		if floor > 0 && pairs[stack[floor-1]] == comment {
+			for _, c := range stack[floor:] {
+				c.rangeEnd = comment.StartLine - 1
+			}
+			stack[floor-1].rangeEnd = comment.StartLine
+			stack = stack[:floor-1]
+			floors = floors[:len(floors)-1]
+			continue
+		}
+		if comment.directive == "endregion" {
+			continue
+		}
+		comment.rangeEnd = 0
+		for len(stack) > floor && comment.Indent <= stack[len(stack)-1].Indent {
 			stack[len(stack)-1].Next = comment
 			stack = stack[:len(stack)-1]
 		}
@@ -587,6 +639,9 @@ func buildTree(comments []*Comment) []*Comment {
 			parent.Children = append(parent.Children, comment)
 		}
 		stack = append(stack, comment)
+		if pairs[comment] != nil {
+			floors = append(floors, len(stack))
+		}
 	}
 	return roots
 }
@@ -647,6 +702,9 @@ func oneLine(s string) string {
 // blockEnd returns the last line belonging to a navigation node, including
 // descendants, stopping at the next peer or ancestor comment.
 func blockEnd(node *Comment, sourceLineCount int) int {
+	if node.rangeEnd != 0 {
+		return node.rangeEnd
+	}
 	if node.Next != nil {
 		return node.Next.StartLine - 1
 	}
