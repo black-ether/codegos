@@ -1,0 +1,6 @@
+pp.ps1 (powershell, 2566 lines)
+     1-19 | File: PowerPath.ps1 Purpose: A script for managing command and path bookmarks with conditional execution in PowerShell. Copyright 2025 Black-Ether (JoJo) Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. T1|0.1 Parameter Definition (6 children) [block 1-82]
+       83 | region T1|0.2 Initial Setup (2 children) [block 83-98]
+      100 | region T1|0.3 Configuration (4 children) [block 100-151]
+      153 | region T1|1 Parameter Handling [block 153-189]
+      191 | T1|2 Main Command Processing (17 children) [block 191-2566]

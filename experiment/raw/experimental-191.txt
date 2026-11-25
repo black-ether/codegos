@@ -1,0 +1,22 @@
+      191 | T1|2 Main Command Processing (2376 lines) [block 191-2566]
+      198 |   region [T2|A. ADD COMMAND] (3 children) [block 198-494]
+      497 |   region B LIST COMMAND (7 children) [block 497-706]
+      709 |   region Path Listing Logic (7 children) [block 709-875]
+      879 |   region REMOVE COMMAND (13 children) [block 879-1227]
+     1230 |   region RENAME COMMAND (11 children) [block 1230-1638]
+1641-1645 |   ------------------------------------------------------------- Command Object Structure (Blueprint) ------------------------------------------------------------- This defines the standard object structure we will use to store the outcome of executing each command. (6 lines) [block 1641-1646]
+1647-1661 |   [PSCustomObject]@{ OriginalIndex = $index # Integer: 1-based index from the original CSV ListName = $listName # String: Name of the command list CommandString = $commandString # String: The actual command executed CustomName = $customName # String: User-defined name or CommandString RuntimeIndex = 1 # Integer: Which iteration this is (for future -Repeat feature, defaults to 1) Status = 'NotRun' | 'Success' | 'Failure' | 'Skipped' # String: Execution outcome StartTime = $null # DateTime: When execution started EndTime = $null # DateTime: When execution finished Duration = $null # TimeSpan: Total execution time Output = $null # String[] or String: Captured StdOut/StdErr ErrorRecord = $null # System.Management.Automation.ErrorRecord: Error details if Status='Failure' ExecutedInParallel = $false # Boolean: Whether it ran via ForEach-Object -Parallel } ------------------------------------------------------------- (16 lines) [block 1647-1662]
+     1663 |   region RUN COMMAND (2 lines) [block 1663-1664]
+     1664 |             Write-Debug "DEBUG: Run command detected. Set: $($PSCmdlet.ParameterSetName)"
+     1665 |   --- Get Inputs from Parameters --- (16 lines) [block 1665-1680]
+     1681 |   --- End Get Inputs --- (2 lines) [block 1681-1682]
+     1682 |     
+     1683 |   --- Determine Iteration Count --- (10 lines) [block 1683-1692]
+     1693 |   --- End Determine Iteration Count --- (2 lines) [block 1693-1694]
+     1694 |     
+     1695 |   --- Resolve Inputs into Actions --- (6 children) [block 1695-1745]
+     1746 |   --- End Resolve Inputs --- (2 lines) [block 1746-1747]
+     1747 |     
+     1748 |   --- Main Execution --- (5 lines) [block 1748-1752]
+     1753 |   Determine if this is a single command variable run (2 children) [block 1753-2452]
+     2453 |   region SET COMMAND (13 children) [block 2453-2560]

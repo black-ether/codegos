@@ -1,0 +1,290 @@
+[
+ {
+  "parent": null,
+  "text": "MaximumTaskCall is the max number of times a task can be called. This exists to prevent infinite loops on cyclic dependencies",
+  "start_line": 28,
+  "end_line": 29,
+  "block_end": 32,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "MatchingTask represents a task that matches a given call. It includes the task itself and a list of wildcards that were matched.",
+  "start_line": 33,
+  "end_line": 34,
+  "block_end": 39,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "Run runs Task",
+  "start_line": 40,
+  "end_line": 40,
+  "block_end": 125,
+  "child_count": 2
+ },
+ {
+  "parent": 40,
+  "text": "check if given tasks exist",
+  "start_line": 42,
+  "end_line": 42,
+  "block_end": 75,
+  "child_count": 0
+ },
+ {
+  "parent": 40,
+  "text": "Prompt for all required vars from deps upfront (parallel execution)",
+  "start_line": 76,
+  "end_line": 76,
+  "block_end": 125,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "RunTask runs a task by its name",
+  "start_line": 126,
+  "end_line": 126,
+  "block_end": 457,
+  "child_count": 7
+ },
+ {
+  "parent": 126,
+  "text": "Inject prompted vars into call if available",
+  "start_line": 128,
+  "end_line": 128,
+  "block_end": 149,
+  "child_count": 1
+ },
+ {
+  "parent": 128,
+  "text": "Only inject if not already set in call",
+  "start_line": 134,
+  "end_line": 134,
+  "block_end": 149,
+  "child_count": 0
+ },
+ {
+  "parent": 126,
+  "text": "Check required vars early (before template compilation) if we can't prompt. This gives a clear \"missing required variables\" error instead of a template error.",
+  "start_line": 150,
+  "end_line": 151,
+  "block_end": 162,
+  "child_count": 0
+ },
+ {
+  "parent": 126,
+  "text": "Check if condition after CompiledTask so dynamic variables are resolved",
+  "start_line": 163,
+  "end_line": 163,
+  "block_end": 174,
+  "child_count": 0
+ },
+ {
+  "parent": 126,
+  "text": "Prompt for missing required vars after if check (avoid prompting if task won't run)",
+  "start_line": 175,
+  "end_line": 175,
+  "block_end": 353,
+  "child_count": 1
+ },
+ {
+  "parent": 175,
+  "text": "Recompile with the new vars",
+  "start_line": 181,
+  "end_line": 181,
+  "block_end": 353,
+  "child_count": 0
+ },
+ {
+  "parent": 126,
+  "text": "Resolve template with secrets masked for logging",
+  "start_line": 354,
+  "end_line": 354,
+  "block_end": 368,
+  "child_count": 0
+ },
+ {
+  "parent": 126,
+  "text": "In place before the if condition, which would otherwise run unbounded.",
+  "start_line": 369,
+  "end_line": 369,
+  "block_end": 377,
+  "child_count": 0
+ },
+ {
+  "parent": 126,
+  "text": "Check if condition for any command type",
+  "start_line": 378,
+  "end_line": 378,
+  "block_end": 457,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "isCommandFailure reports whether the command failed on its own terms - a non-zero exit status or its timeout - rather than Task failing to run it.",
+  "start_line": 458,
+  "end_line": 459,
+  "block_end": 467,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "timedOut reports whether ctx was cancelled by the given timeout rather than by an inherited deadline, which a derived context reports as its own.",
+  "start_line": 468,
+  "end_line": 469,
+  "block_end": 473,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "executionState is the outcome of a task execution, shared with the callers that join it. err is written before done is closed; read it only once closed.",
+  "start_line": 474,
+  "end_line": 475,
+  "block_end": 529,
+  "child_count": 2
+ },
+ {
+  "parent": 474,
+  "text": "Release our execution slot to avoid blocking other tasks while we wait",
+  "start_line": 497,
+  "end_line": 497,
+  "block_end": 500,
+  "child_count": 0
+ },
+ {
+  "parent": 474,
+  "text": "A finished execution wins even if our context is done: there is nothing left to wait for, and select would otherwise pick at random.",
+  "start_line": 501,
+  "end_line": 502,
+  "block_end": 529,
+  "child_count": 2
+ },
+ {
+  "parent": 501,
+  "text": "Its outcome is ours. Returning nil would hide an execution that failed, or that another caller's timeout killed.",
+  "start_line": 511,
+  "end_line": 512,
+  "block_end": 514,
+  "child_count": 0
+ },
+ {
+  "parent": 501,
+  "text": "We did not start it, so we can only stop waiting. Report the cause so that our own timeout surfaces as one.",
+  "start_line": 515,
+  "end_line": 516,
+  "block_end": 529,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "FindMatchingTasks returns a list of tasks that match the given call. A task matches a call if its name is equal to the call's task name, or one of aliases, or if it matches a wildcard pattern. The function returns a list of MatchingTask structs, each containing a task and a list of wildcards that were matched. If multiple tasks match due to aliases, a TaskNameConflictError is returned.",
+  "start_line": 530,
+  "end_line": 534,
+  "block_end": 576,
+  "child_count": 3
+ },
+ {
+  "parent": 530,
+  "text": "If there is a direct match, return it",
+  "start_line": 540,
+  "end_line": 540,
+  "block_end": 556,
+  "child_count": 0
+ },
+ {
+  "parent": 530,
+  "text": "If we found multiple tasks",
+  "start_line": 557,
+  "end_line": 557,
+  "block_end": 564,
+  "child_count": 0
+ },
+ {
+  "parent": 530,
+  "text": "Attempt a wildcard match",
+  "start_line": 565,
+  "end_line": 565,
+  "block_end": 576,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "GetTask will return the task with the name matching the given call from the taskfile. If no task is found, it will search for tasks with a matching alias. If multiple tasks contain the same alias or no matches are found an error is returned.",
+  "start_line": 577,
+  "end_line": 579,
+  "block_end": 654,
+  "child_count": 7
+ },
+ {
+  "parent": 577,
+  "text": "Search for a matching task",
+  "start_line": 581,
+  "end_line": 581,
+  "block_end": 594,
+  "child_count": 0
+ },
+ {
+  "parent": 577,
+  "text": "If we found no tasks",
+  "start_line": 595,
+  "end_line": 595,
+  "block_end": 613,
+  "child_count": 0
+ },
+ {
+  "parent": 577,
+  "text": "Create an error group to wait for each task to be compiled",
+  "start_line": 614,
+  "end_line": 614,
+  "block_end": 616,
+  "child_count": 0
+ },
+ {
+  "parent": 577,
+  "text": "Sort the tasks",
+  "start_line": 617,
+  "end_line": 617,
+  "block_end": 621,
+  "child_count": 0
+ },
+ {
+  "parent": 577,
+  "text": "Filter tasks based on the given filter functions",
+  "start_line": 622,
+  "end_line": 622,
+  "block_end": 634,
+  "child_count": 0
+ },
+ {
+  "parent": 577,
+  "text": "Compile the list of tasks",
+  "start_line": 635,
+  "end_line": 635,
+  "block_end": 646,
+  "child_count": 0
+ },
+ {
+  "parent": 577,
+  "text": "Wait for all the go routines to finish",
+  "start_line": 647,
+  "end_line": 647,
+  "block_end": 654,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "FilterOutNoDesc removes all tasks that do not contain a description.",
+  "start_line": 655,
+  "end_line": 655,
+  "block_end": 659,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "FilterOutInternal removes all tasks that are marked as internal.",
+  "start_line": 660,
+  "end_line": 660,
+  "block_end": 675,
+  "child_count": 0
+ }
+]

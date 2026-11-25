@@ -1,0 +1,66 @@
+[
+ {
+  "parent": null,
+  "text": "region Outer",
+  "start_line": 1,
+  "end_line": 1,
+  "block_end": 7,
+  "child_count": 1
+ },
+ {
+  "parent": 1,
+  "text": "First continuation",
+  "start_line": 2,
+  "end_line": 3,
+  "block_end": 6,
+  "child_count": 1
+ },
+ {
+  "parent": 2,
+  "text": "region Nested",
+  "start_line": 4,
+  "end_line": 4,
+  "block_end": 6,
+  "child_count": 1
+ },
+ {
+  "parent": 4,
+  "text": "shallow",
+  "start_line": 5,
+  "end_line": 5,
+  "block_end": 5,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "region Sibling",
+  "start_line": 9,
+  "end_line": 9,
+  "block_end": 12,
+  "child_count": 1
+ },
+ {
+  "parent": 9,
+  "text": "region block ordinary endregion prose",
+  "start_line": 10,
+  "end_line": 11,
+  "block_end": 11,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "regionish",
+  "start_line": 14,
+  "end_line": 14,
+  "block_end": 14,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "region Unclosed",
+  "start_line": 15,
+  "end_line": 15,
+  "block_end": 15,
+  "child_count": 0
+ }
+]

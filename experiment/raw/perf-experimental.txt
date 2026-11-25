@@ -1,0 +1,18 @@
+goos: windows
+goarch: amd64
+pkg: codegos
+cpu: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+BenchmarkSource-12    	     422	    836677 ns/op
+BenchmarkSource-12    	     411	    829738 ns/op
+BenchmarkSource-12    	     423	    811876 ns/op
+PASS
+ok  	codegos	1.329s
+goos: windows
+goarch: amd64
+pkg: codegos
+cpu: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+BenchmarkSource-12    	    1562	    222976 ns/op
+BenchmarkSource-12    	    1518	    229431 ns/op
+BenchmarkSource-12    	    1664	    218055 ns/op
+PASS
+ok  	codegos	1.160s

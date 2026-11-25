@@ -1,0 +1,3194 @@
+[
+ {
+  "parent": null,
+  "text": "File: PowerPath.ps1 Purpose: A script for managing command and path bookmarks with conditional execution in PowerShell. Copyright 2025 Black-Ether (JoJo) Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. T1|0.1 Parameter Definition",
+  "start_line": 1,
+  "end_line": 19,
+  "block_end": 82,
+  "child_count": 6
+ },
+ {
+  "parent": 1,
+  "text": "--- Command Parameter ---",
+  "start_line": 22,
+  "end_line": 22,
+  "block_end": 34,
+  "child_count": 0
+ },
+ {
+  "parent": 1,
+  "text": "--- Add/Set Command ---",
+  "start_line": 35,
+  "end_line": 35,
+  "block_end": 50,
+  "child_count": 0
+ },
+ {
+  "parent": 1,
+  "text": "--- Rename/Remove Command ---",
+  "start_line": 51,
+  "end_line": 51,
+  "block_end": 55,
+  "child_count": 0
+ },
+ {
+  "parent": 1,
+  "text": "--- List Command ---",
+  "start_line": 56,
+  "end_line": 56,
+  "block_end": 71,
+  "child_count": 1
+ },
+ {
+  "parent": 56,
+  "text": "--- Run Command ---",
+  "start_line": 62,
+  "end_line": 62,
+  "block_end": 71,
+  "child_count": 0
+ },
+ {
+  "parent": 1,
+  "text": "--- Help Command ---",
+  "start_line": 72,
+  "end_line": 72,
+  "block_end": 74,
+  "child_count": 0
+ },
+ {
+  "parent": 1,
+  "text": "--- Remaining Arguments ---",
+  "start_line": 75,
+  "end_line": 75,
+  "block_end": 82,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "region T1|0.2 Initial Setup",
+  "start_line": 83,
+  "end_line": 83,
+  "block_end": 84,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "1. Import required modules",
+  "start_line": 85,
+  "end_line": 85,
+  "block_end": 92,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "2. Initialize global and script variables",
+  "start_line": 93,
+  "end_line": 93,
+  "block_end": 97,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "endregion",
+  "start_line": 98,
+  "end_line": 98,
+  "block_end": 99,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "region T1|0.3 Configuration",
+  "start_line": 100,
+  "end_line": 100,
+  "block_end": 101,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "0.1| Set Configuration Variables",
+  "start_line": 102,
+  "end_line": 102,
+  "block_end": 109,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "0.2 Check for Configuration File |(Validation)",
+  "start_line": 110,
+  "end_line": 110,
+  "block_end": 118,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "Prepare Default Configuration Object |(Setup)#Config",
+  "start_line": 119,
+  "end_line": 119,
+  "block_end": 129,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "0.3| Set Configuration",
+  "start_line": 130,
+  "end_line": 130,
+  "block_end": 150,
+  "child_count": 3
+ },
+ {
+  "parent": 130,
+  "text": "4.1 Set Configuration from file",
+  "start_line": 133,
+  "end_line": 133,
+  "block_end": 135,
+  "child_count": 0
+ },
+ {
+  "parent": 130,
+  "text": "4.1 Handle Missing Properties (#ErrorHandling)",
+  "start_line": 136,
+  "end_line": 136,
+  "block_end": 144,
+  "child_count": 0
+ },
+ {
+  "parent": 130,
+  "text": "4.2 Fallback to Default Configuration @Fallback",
+  "start_line": 145,
+  "end_line": 145,
+  "block_end": 150,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "endregion [T1|0.3]",
+  "start_line": 151,
+  "end_line": 151,
+  "block_end": 152,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "region T1|1 Parameter Handling",
+  "start_line": 153,
+  "end_line": 153,
+  "block_end": 188,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "endregion",
+  "start_line": 189,
+  "end_line": 189,
+  "block_end": 190,
+  "child_count": 0
+ },
+ {
+  "parent": null,
+  "text": "T1|2 Main Command Processing",
+  "start_line": 191,
+  "end_line": 191,
+  "block_end": 2566,
+  "child_count": 6
+ },
+ {
+  "parent": 191,
+  "text": "region [T2|A. ADD COMMAND]",
+  "start_line": 198,
+  "end_line": 198,
+  "block_end": 202,
+  "child_count": 0
+ },
+ {
+  "parent": 191,
+  "text": "region T2(-H1Aa(- Command Logic",
+  "start_line": 203,
+  "end_line": 203,
+  "block_end": 308,
+  "child_count": 3
+ },
+ {
+  "parent": 203,
+  "text": "0-) Initialize variables",
+  "start_line": 205,
+  "end_line": 205,
+  "block_end": 207,
+  "child_count": 0
+ },
+ {
+  "parent": 203,
+  "text": "a-) Create Global Command Variable |(Execution)",
+  "start_line": 208,
+  "end_line": 208,
+  "block_end": 217,
+  "child_count": 0
+ },
+ {
+  "parent": 203,
+  "text": "b| Save Command Script Definition to File",
+  "start_line": 218,
+  "end_line": 218,
+  "block_end": 308,
+  "child_count": 4
+ },
+ {
+  "parent": 218,
+  "text": "1| Determine target command file path",
+  "start_line": 220,
+  "end_line": 220,
+  "block_end": 230,
+  "child_count": 0
+ },
+ {
+  "parent": 218,
+  "text": "2| Prepare command record object (Index starts at 0 temporarily)",
+  "start_line": 231,
+  "end_line": 231,
+  "block_end": 238,
+  "child_count": 0
+ },
+ {
+  "parent": 218,
+  "text": "3| Write record to CSV",
+  "start_line": 239,
+  "end_line": 239,
+  "block_end": 295,
+  "child_count": 3
+ },
+ {
+  "parent": 239,
+  "text": "3.1| Create new file if it doesn't exist",
+  "start_line": 244,
+  "end_line": 244,
+  "block_end": 250,
+  "child_count": 0
+ },
+ {
+  "parent": 239,
+  "text": "3.1| Read existing data",
+  "start_line": 251,
+  "end_line": 251,
+  "block_end": 289,
+  "child_count": 2
+ },
+ {
+  "parent": 251,
+  "text": "3.2 Overwrite existing",
+  "start_line": 262,
+  "end_line": 262,
+  "block_end": 274,
+  "child_count": 0
+ },
+ {
+  "parent": 251,
+  "text": "3.3 Append new",
+  "start_line": 275,
+  "end_line": 275,
+  "block_end": 289,
+  "child_count": 0
+ },
+ {
+  "parent": 239,
+  "text": "3.e (#ErrorHandling)",
+  "start_line": 290,
+  "end_line": 290,
+  "block_end": 295,
+  "child_count": 0
+ },
+ {
+  "parent": 218,
+  "text": "4| Report save result (masking path)",
+  "start_line": 296,
+  "end_line": 296,
+  "block_end": 308,
+  "child_count": 0
+ },
+ {
+  "parent": 191,
+  "text": "endregion region Ab: Add Path Mapping (via -Path and optionally -Name/-Group) (Execution)",
+  "start_line": 309,
+  "end_line": 310,
+  "block_end": 486,
+  "child_count": 14
+ },
+ {
+  "parent": 309,
+  "text": "region (a1) Determine/Validate Path and Custom Name (Setup/Validation) 1. Check for special case: Argument might be a custom name for the current directory.",
+  "start_line": 313,
+  "end_line": 314,
+  "block_end": 359,
+  "child_count": 4
+ },
+ {
+  "parent": 313,
+  "text": "1.1 Set flags, use argument as name, CWD as path, validate name.",
+  "start_line": 320,
+  "end_line": 320,
+  "block_end": 329,
+  "child_count": 0
+ },
+ {
+  "parent": 313,
+  "text": "2. Standard path/name determination.",
+  "start_line": 330,
+  "end_line": 330,
+  "block_end": 331,
+  "child_count": 0
+ },
+ {
+  "parent": 313,
+  "text": "2.1 Determine custom name (explicit from -Name or empty).",
+  "start_line": 332,
+  "end_line": 332,
+  "block_end": 347,
+  "child_count": 0
+ },
+ {
+  "parent": 313,
+  "text": "2.2 Resolve and validate the provided path argument.",
+  "start_line": 348,
+  "end_line": 348,
+  "block_end": 359,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "endregion (a1) Determine/Validate Path and Custom Name (Setup/Validation)",
+  "start_line": 360,
+  "end_line": 360,
+  "block_end": 361,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "region (b1) Check for Potential Variable Name Conflicts (Validation) 1. Determine the variable name PowerPath would generate for this path/name combination.",
+  "start_line": 362,
+  "end_line": 363,
+  "block_end": 365,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "2. Warn if this name conflicts with existing environment or global PowerShell variables.",
+  "start_line": 366,
+  "end_line": 366,
+  "block_end": 373,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "endregion (b1) Check for Potential Variable Name Conflicts (Validation)",
+  "start_line": 374,
+  "end_line": 374,
+  "block_end": 375,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "region (c1) Load or Initialize Mappings List (Setup) 1. Determine the target data file path (group-specific or default).",
+  "start_line": 376,
+  "end_line": 377,
+  "block_end": 390,
+  "child_count": 3
+ },
+ {
+  "parent": 376,
+  "text": "Load fresh for the specific group",
+  "start_line": 380,
+  "end_line": 380,
+  "block_end": 383,
+  "child_count": 0
+ },
+ {
+  "parent": 376,
+  "text": "Use pre-loaded global mappings if available, otherwise initialize",
+  "start_line": 384,
+  "end_line": 384,
+  "block_end": 387,
+  "child_count": 0
+ },
+ {
+  "parent": 376,
+  "text": "Ensure local $mappings variable reflects the correct list (global or freshly loaded if global was null)",
+  "start_line": 388,
+  "end_line": 388,
+  "block_end": 390,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "2. Ensure $mappings is a valid, initialized List object.",
+  "start_line": 391,
+  "end_line": 391,
+  "block_end": 395,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "endregion (c1) Load or Initialize Mappings List (Setup)",
+  "start_line": 396,
+  "end_line": 396,
+  "block_end": 397,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "region (d1) Check for Existing Mapping (Validation) 1. Find if the resolved path already exists in the mappings list.",
+  "start_line": 398,
+  "end_line": 399,
+  "block_end": 400,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "endregion (d1) Check for Existing Mapping (Validation)",
+  "start_line": 401,
+  "end_line": 401,
+  "block_end": 402,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "region (e1) Add New Path Mapping (if not existing) (Execution)",
+  "start_line": 403,
+  "end_line": 403,
+  "block_end": 447,
+  "child_count": 2
+ },
+ {
+  "parent": 403,
+  "text": "1. Attempt to add the new path, re-index, and save the list.",
+  "start_line": 405,
+  "end_line": 405,
+  "block_end": 442,
+  "child_count": 5
+ },
+ {
+  "parent": 405,
+  "text": "1.1 Add new mapping object to the list (Setup).",
+  "start_line": 407,
+  "end_line": 407,
+  "block_end": 413,
+  "child_count": 0
+ },
+ {
+  "parent": 405,
+  "text": "1.2 Re-index mappings list after sorting (Execution).",
+  "start_line": 414,
+  "end_line": 414,
+  "block_end": 416,
+  "child_count": 0
+ },
+ {
+  "parent": 405,
+  "text": "Sort by Path to ensure stable indexing",
+  "start_line": 417,
+  "end_line": 417,
+  "block_end": 426,
+  "child_count": 0
+ },
+ {
+  "parent": 405,
+  "text": "1.3 Save updated mappings list to file (Execution).",
+  "start_line": 427,
+  "end_line": 427,
+  "block_end": 429,
+  "child_count": 0
+ },
+ {
+  "parent": 405,
+  "text": "1.4 Report successful addition (masking paths) (Egress).",
+  "start_line": 430,
+  "end_line": 430,
+  "block_end": 442,
+  "child_count": 0
+ },
+ {
+  "parent": 403,
+  "text": "1.5 Handle errors during add/save process (Error Handling).",
+  "start_line": 443,
+  "end_line": 443,
+  "block_end": 447,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "endregion (e1) Add New Path Mapping (if not existing) (Execution)",
+  "start_line": 448,
+  "end_line": 448,
+  "block_end": 449,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "region (f1) Handle Existing Path Mapping (if existing) (Execution/Validation)",
+  "start_line": 450,
+  "end_line": 450,
+  "block_end": 484,
+  "child_count": 3
+ },
+ {
+  "parent": 450,
+  "text": "1. Path already exists. Check if name needs updating or just warn.",
+  "start_line": 452,
+  "end_line": 452,
+  "block_end": 453,
+  "child_count": 0
+ },
+ {
+  "parent": 450,
+  "text": "1.1 Determine warning message components (Setup).",
+  "start_line": 454,
+  "end_line": 454,
+  "block_end": 459,
+  "child_count": 0
+ },
+ {
+  "parent": 450,
+  "text": "1.2 Check if name update is required (Validation).",
+  "start_line": 460,
+  "end_line": 460,
+  "block_end": 484,
+  "child_count": 4
+ },
+ {
+  "parent": 460,
+  "text": "1.3 If update needed: Modify mapping, re-index, and save list (Execution).",
+  "start_line": 463,
+  "end_line": 463,
+  "block_end": 466,
+  "child_count": 0
+ },
+ {
+  "parent": 460,
+  "text": "Re-index needed to maintain sorted order consistency, even if only name changed",
+  "start_line": 467,
+  "end_line": 467,
+  "block_end": 477,
+  "child_count": 0
+ },
+ {
+  "parent": 460,
+  "text": "Save the updated list",
+  "start_line": 478,
+  "end_line": 478,
+  "block_end": 480,
+  "child_count": 0
+ },
+ {
+  "parent": 460,
+  "text": "1.4 If no update needed: Display warning only (Egress).",
+  "start_line": 481,
+  "end_line": 481,
+  "block_end": 484,
+  "child_count": 0
+ },
+ {
+  "parent": 309,
+  "text": "endregion (f1) Handle Existing Path Mapping (if existing) (Execution/Validation)",
+  "start_line": 485,
+  "end_line": 485,
+  "block_end": 486,
+  "child_count": 0
+ },
+ {
+  "parent": 191,
+  "text": "endregion ADD CASE",
+  "start_line": 487,
+  "end_line": 487,
+  "block_end": 488,
+  "child_count": 0
+ },
+ {
+  "parent": 191,
+  "text": "Mode: Handle Unrecognized Parameter Set (Error Handling)",
+  "start_line": 489,
+  "end_line": 489,
+  "block_end": 493,
+  "child_count": 0
+ },
+ {
+  "parent": 191,
+  "text": "endregion i. ADD COMMAND",
+  "start_line": 494,
+  "end_line": 494,
+  "block_end": 2566,
+  "child_count": 60
+ },
+ {
+  "parent": 494,
+  "text": "region B LIST COMMAND",
+  "start_line": 497,
+  "end_line": 497,
+  "block_end": 499,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "This block determines WHICH files to process and puts them in $filesToProcess",
+  "start_line": 500,
+  "end_line": 500,
+  "block_end": 581,
+  "child_count": 4
+ },
+ {
+  "parent": 500,
+  "text": "--- Handle -cg parameter: Find the SPECIFIC group file ---",
+  "start_line": 504,
+  "end_line": 504,
+  "block_end": 506,
+  "child_count": 0
+ },
+ {
+  "parent": 500,
+  "text": "Write-Host \"Processing Group: $CommandGroupFilter\" -ForegroundColor Green Try to get the specific file object",
+  "start_line": 507,
+  "end_line": 508,
+  "block_end": 570,
+  "child_count": 4
+ },
+ {
+  "parent": 507,
+  "text": "Handle case where the specific group file doesn't exist",
+  "start_line": 516,
+  "end_line": 516,
+  "block_end": 524,
+  "child_count": 0
+ },
+ {
+  "parent": 507,
+  "text": "--- Find ALL *.csv files (Original behavior restored by -a) ---",
+  "start_line": 525,
+  "end_line": 525,
+  "block_end": 534,
+  "child_count": 0
+ },
+ {
+  "parent": 507,
+  "text": "Add all found FileInfo objects to the list",
+  "start_line": 535,
+  "end_line": 535,
+  "block_end": 545,
+  "child_count": 0
+ },
+ {
+  "parent": 507,
+  "text": "--- Find ONLY the default command file (New default behavior when -a is NOT used) --- This is the 'minimal change' code from the previous step",
+  "start_line": 546,
+  "end_line": 547,
+  "block_end": 570,
+  "child_count": 0
+ },
+ {
+  "parent": 500,
+  "text": "This can happen if -cg group file not found, or if default file not found/set, or if -a used but no CSVs exist.",
+  "start_line": 571,
+  "end_line": 571,
+  "block_end": 572,
+  "child_count": 0
+ },
+ {
+  "parent": 500,
+  "text": "Globals should already be cleared in the specific error paths above that lead here.",
+  "start_line": 573,
+  "end_line": 573,
+  "block_end": 581,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Loop through all the files identified earlier (either all CSVs or just the specific group CSV)",
+  "start_line": 582,
+  "end_line": 582,
+  "block_end": 655,
+  "child_count": 2
+ },
+ {
+  "parent": 582,
+  "text": "Skip empty files before trying to import to avoid errors",
+  "start_line": 587,
+  "end_line": 587,
+  "block_end": 613,
+  "child_count": 4
+ },
+ {
+  "parent": 587,
+  "text": "Read the CSV content Use -ErrorAction Stop to catch parsing errors in the Catch block",
+  "start_line": 595,
+  "end_line": 596,
+  "block_end": 598,
+  "child_count": 0
+ },
+ {
+  "parent": 587,
+  "text": "Check if import resulted in null/empty (e.g., only headers)",
+  "start_line": 599,
+  "end_line": 599,
+  "block_end": 604,
+  "child_count": 0
+ },
+ {
+  "parent": 587,
+  "text": "If we successfully imported data, add this file's path to our list of processed files",
+  "start_line": 605,
+  "end_line": 605,
+  "block_end": 608,
+  "child_count": 0
+ },
+ {
+  "parent": 587,
+  "text": "Catch errors during Import-Csv (e.g., file not found, access denied, malformed CSV)",
+  "start_line": 609,
+  "end_line": 609,
+  "block_end": 613,
+  "child_count": 0
+ },
+ {
+  "parent": 582,
+  "text": "Ensure iteration works correctly even if CSV has only one data row",
+  "start_line": 614,
+  "end_line": 614,
+  "block_end": 655,
+  "child_count": 1
+ },
+ {
+  "parent": 614,
+  "text": "Validate that required columns exist AND contain non-whitespace data",
+  "start_line": 616,
+  "end_line": 616,
+  "block_end": 655,
+  "child_count": 6
+ },
+ {
+  "parent": 616,
+  "text": "Create the command object, add the sequential index and the SourceFile",
+  "start_line": 622,
+  "end_line": 622,
+  "block_end": 629,
+  "child_count": 1
+ },
+ {
+  "parent": 622,
+  "text": "Condition will be added below if valid",
+  "start_line": 628,
+  "end_line": 628,
+  "block_end": 629,
+  "child_count": 0
+ },
+ {
+  "parent": 616,
+  "text": "2. Check for and validate the Condition column value",
+  "start_line": 630,
+  "end_line": 630,
+  "block_end": 637,
+  "child_count": 1
+ },
+ {
+  "parent": 630,
+  "text": "Add the trimmed Condition value to the properties hashtable",
+  "start_line": 634,
+  "end_line": 634,
+  "block_end": 637,
+  "child_count": 0
+ },
+ {
+  "parent": 616,
+  "text": "3. Create the PSCustomObject from the properties hashtable ONCE",
+  "start_line": 638,
+  "end_line": 638,
+  "block_end": 640,
+  "child_count": 0
+ },
+ {
+  "parent": 616,
+  "text": "4. Add the fully formed object to the list ONCE",
+  "start_line": 641,
+  "end_line": 641,
+  "block_end": 643,
+  "child_count": 0
+ },
+ {
+  "parent": 616,
+  "text": "5. Increment index ONLY after successfully adding an object",
+  "start_line": 644,
+  "end_line": 644,
+  "block_end": 646,
+  "child_count": 0
+ },
+ {
+  "parent": 616,
+  "text": "Report skipped rows due to missing/empty required data",
+  "start_line": 647,
+  "end_line": 647,
+  "block_end": 655,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Check if *any* valid commands were found across all processed files ---",
+  "start_line": 656,
+  "end_line": 656,
+  "block_end": 667,
+  "child_count": 2
+ },
+ {
+  "parent": 656,
+  "text": "Construct a message indicating the scope (specific group or all files)",
+  "start_line": 658,
+  "end_line": 658,
+  "block_end": 660,
+  "child_count": 0
+ },
+ {
+  "parent": 656,
+  "text": "Clear globals since nothing was listed",
+  "start_line": 661,
+  "end_line": 661,
+  "block_end": 667,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Update Global Variables --- Store the accumulated, indexed list (now including SourceFile)",
+  "start_line": 668,
+  "end_line": 669,
+  "block_end": 671,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Store all *successfully* processed file paths, joined by a semicolon",
+  "start_line": 672,
+  "end_line": 672,
+  "block_end": 676,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "4. Format and Display Commands",
+  "start_line": 677,
+  "end_line": 677,
+  "block_end": 704,
+  "child_count": 4
+ },
+ {
+  "parent": 677,
+  "text": "--- Command Listing Logic ---",
+  "start_line": 678,
+  "end_line": 678,
+  "block_end": 683,
+  "child_count": 0
+ },
+ {
+  "parent": 677,
+  "text": "Prepare parameters for the new function",
+  "start_line": 684,
+  "end_line": 684,
+  "block_end": 692,
+  "child_count": 1
+ },
+ {
+  "parent": 684,
+  "text": "ColorMode = $effectiveColorMode ColorConfig = $powerpathConfi",
+  "start_line": 690,
+  "end_line": 691,
+  "block_end": 692,
+  "child_count": 0
+ },
+ {
+  "parent": 677,
+  "text": "Conditionally add ConditionValue if the property exists on the object",
+  "start_line": 693,
+  "end_line": 693,
+  "block_end": 697,
+  "child_count": 0
+ },
+ {
+  "parent": 677,
+  "text": "Call the new function and write its multi-line output",
+  "start_line": 698,
+  "end_line": 698,
+  "block_end": 704,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "# --- end main command processing logic --- endregion",
+  "start_line": 705,
+  "end_line": 706,
+  "block_end": 708,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "region Path Listing Logic --- Determine Effective Color Mode --- Priority: Command-line parameter -> Config file -> Default (1)",
+  "start_line": 709,
+  "end_line": 711,
+  "block_end": 747,
+  "child_count": 4
+ },
+ {
+  "parent": 709,
+  "text": "Parameter was explicitly used",
+  "start_line": 716,
+  "end_line": 716,
+  "block_end": 719,
+  "child_count": 0
+ },
+ {
+  "parent": 709,
+  "text": "Check if config exists and if the value needs updating",
+  "start_line": 720,
+  "end_line": 720,
+  "block_end": 733,
+  "child_count": 0
+ },
+ {
+  "parent": 709,
+  "text": "Parameter not used, use config file value (if valid)",
+  "start_line": 734,
+  "end_line": 734,
+  "block_end": 743,
+  "child_count": 0
+ },
+ {
+  "parent": 709,
+  "text": "Parameter not used and config value unavailable/invalid, use default",
+  "start_line": 744,
+  "end_line": 744,
+  "block_end": 747,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Save Config if it was Updated ---",
+  "start_line": 748,
+  "end_line": 748,
+  "block_end": 777,
+  "child_count": 1
+ },
+ {
+  "parent": 748,
+  "text": "Use a sufficient depth to ensure nested objects like AdvancedColors are saved correctly",
+  "start_line": 751,
+  "end_line": 751,
+  "block_end": 777,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Cache Handling ---",
+  "start_line": 778,
+  "end_line": 778,
+  "block_end": 785,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End Cache Handling ---",
+  "start_line": 786,
+  "end_line": 786,
+  "block_end": 791,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Main Listing Loop ---",
+  "start_line": 792,
+  "end_line": 792,
+  "block_end": 863,
+  "child_count": 4
+ },
+ {
+  "parent": 792,
+  "text": "--- Size Calculation/Caching ---",
+  "start_line": 798,
+  "end_line": 798,
+  "block_end": 847,
+  "child_count": 3
+ },
+ {
+  "parent": 798,
+  "text": "Check if the path exists in the cache for this group",
+  "start_line": 806,
+  "end_line": 806,
+  "block_end": 822,
+  "child_count": 2
+ },
+ {
+  "parent": 806,
+  "text": "Check if the LastWriteTime matches the cached one",
+  "start_line": 809,
+  "end_line": 809,
+  "block_end": 819,
+  "child_count": 1
+ },
+ {
+  "parent": 809,
+  "text": "Time mismatch, needs recalculation (handled below)",
+  "start_line": 816,
+  "end_line": 816,
+  "block_end": 819,
+  "child_count": 0
+ },
+ {
+  "parent": 806,
+  "text": "Not in cache, needs calculation (handled below)",
+  "start_line": 820,
+  "end_line": 820,
+  "block_end": 822,
+  "child_count": 0
+ },
+ {
+  "parent": 798,
+  "text": "If size wasn't retrieved from cache, calculate and update cache",
+  "start_line": 823,
+  "end_line": 823,
+  "block_end": 844,
+  "child_count": 3
+ },
+ {
+  "parent": 823,
+  "text": "Folder: Use COM-based folder size calculation",
+  "start_line": 827,
+  "end_line": 827,
+  "block_end": 830,
+  "child_count": 0
+ },
+ {
+  "parent": 823,
+  "text": "File: Use .Length property and format",
+  "start_line": 831,
+  "end_line": 831,
+  "block_end": 833,
+  "child_count": 0
+ },
+ {
+  "parent": 823,
+  "text": "Update the cache with the new size and current timestamp",
+  "start_line": 834,
+  "end_line": 834,
+  "block_end": 844,
+  "child_count": 0
+ },
+ {
+  "parent": 798,
+  "text": "$sizeStr remains \"N/A\" from initialization above",
+  "start_line": 845,
+  "end_line": 845,
+  "block_end": 847,
+  "child_count": 0
+ },
+ {
+  "parent": 792,
+  "text": "--- End Size Calculation/Caching ---",
+  "start_line": 848,
+  "end_line": 848,
+  "block_end": 849,
+  "child_count": 0
+ },
+ {
+  "parent": 792,
+  "text": "--- Format and Output ---",
+  "start_line": 850,
+  "end_line": 850,
+  "block_end": 859,
+  "child_count": 0
+ },
+ {
+  "parent": 792,
+  "text": "--- End Format and Output ---",
+  "start_line": 860,
+  "end_line": 860,
+  "block_end": 863,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Cache Cleanup --- Remove entries from the cache that are no longer in the current listing for this group",
+  "start_line": 864,
+  "end_line": 865,
+  "block_end": 872,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End of Cache Cleanup ---",
+  "start_line": 873,
+  "end_line": 873,
+  "block_end": 878,
+  "child_count": 1
+ },
+ {
+  "parent": 873,
+  "text": "endregion LIST COMMAND",
+  "start_line": 875,
+  "end_line": 875,
+  "block_end": 878,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "region REMOVE COMMAND",
+  "start_line": 879,
+  "end_line": 879,
+  "block_end": 883,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "---=== PRE-CHECKS ===--- 1. Check if the last list operation was actually 'powerpath list' or 'powerpath list -lc'",
+  "start_line": 884,
+  "end_line": 885,
+  "block_end": 890,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Store whether we're removing a path or command",
+  "start_line": 891,
+  "end_line": 891,
+  "block_end": 894,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "2. Check if the list and source file info exist",
+  "start_line": 895,
+  "end_line": 895,
+  "block_end": 899,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Get the list content from globals",
+  "start_line": 900,
+  "end_line": 900,
+  "block_end": 902,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Check Index validity against the retrieved list",
+  "start_line": 903,
+  "end_line": 903,
+  "block_end": 905,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Find the specific item to remove from the list based on Index",
+  "start_line": 906,
+  "end_line": 906,
+  "block_end": 909,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Get key details from the mapping to remove ---",
+  "start_line": 910,
+  "end_line": 910,
+  "block_end": 937,
+  "child_count": 3
+ },
+ {
+  "parent": 910,
+  "text": "This is unlikely if List commands populate CustomName, but good safeguard",
+  "start_line": 915,
+  "end_line": 915,
+  "block_end": 921,
+  "child_count": 0
+ },
+ {
+  "parent": 910,
+  "text": "For commands, the 'content' to match is the script block string",
+  "start_line": 922,
+  "end_line": 922,
+  "block_end": 929,
+  "child_count": 0
+ },
+ {
+  "parent": 910,
+  "text": "For paths, the 'content' to match is the file system path string",
+  "start_line": 930,
+  "end_line": 930,
+  "block_end": 937,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Initial Debug Log - uses correctly derived values",
+  "start_line": 938,
+  "end_line": 938,
+  "block_end": 939,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End Get key details ---",
+  "start_line": 940,
+  "end_line": 940,
+  "block_end": 941,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "---=== Determine the Correct Target Data File ===--- Initialize variable to hold the single target file path",
+  "start_line": 942,
+  "end_line": 943,
+  "block_end": 979,
+  "child_count": 4
+ },
+ {
+  "parent": 942,
+  "text": "--- Handling Command Removal --- Check if the mapping object has the SourceFile property we added earlier",
+  "start_line": 947,
+  "end_line": 948,
+  "block_end": 964,
+  "child_count": 3
+ },
+ {
+  "parent": 947,
+  "text": "Get the specific file path from the mapping object",
+  "start_line": 950,
+  "end_line": 950,
+  "block_end": 953,
+  "child_count": 0
+ },
+ {
+  "parent": 947,
+  "text": "Extra Check: Ensure the determined file actually exists before proceeding",
+  "start_line": 954,
+  "end_line": 954,
+  "block_end": 959,
+  "child_count": 0
+ },
+ {
+  "parent": 947,
+  "text": "This should not happen if 'pp ls -lc' ran correctly, but added as a safeguard",
+  "start_line": 960,
+  "end_line": 960,
+  "block_end": 964,
+  "child_count": 0
+ },
+ {
+  "parent": 942,
+  "text": "--- Handling Path Removal (Original Logic) --- Use the single path list file stored in the global (as set by 'pp ls')",
+  "start_line": 965,
+  "end_line": 966,
+  "block_end": 969,
+  "child_count": 0
+ },
+ {
+  "parent": 942,
+  "text": "Extra Check: Ensure the path list file exists",
+  "start_line": 970,
+  "end_line": 970,
+  "block_end": 975,
+  "child_count": 0
+ },
+ {
+  "parent": 942,
+  "text": "This case should be caught by the initial $validSources check, but included for robustness",
+  "start_line": 976,
+  "end_line": 976,
+  "block_end": 979,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "---=== End Target Data File Determination ===---",
+  "start_line": 980,
+  "end_line": 980,
+  "block_end": 981,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Wrap core logic in Try/Catch for better error handling",
+  "start_line": 982,
+  "end_line": 982,
+  "block_end": 1219,
+  "child_count": 14
+ },
+ {
+  "parent": 982,
+  "text": "--- Determine Variable Name and Remove Associated Global Variable ---",
+  "start_line": 984,
+  "end_line": 984,
+  "block_end": 987,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "Determine name based on removal type",
+  "start_line": 988,
+  "end_line": 988,
+  "block_end": 1016,
+  "child_count": 3
+ },
+ {
+  "parent": 988,
+  "text": "For paths, first try VariableInfo.Name",
+  "start_line": 994,
+  "end_line": 994,
+  "block_end": 999,
+  "child_count": 0
+ },
+ {
+  "parent": 988,
+  "text": "If VariableInfo didn't work, try CustomName as fallback for paths",
+  "start_line": 1000,
+  "end_line": 1000,
+  "block_end": 1005,
+  "child_count": 0
+ },
+ {
+  "parent": 988,
+  "text": "If still no name, try deriving from path (last resort)",
+  "start_line": 1006,
+  "end_line": 1006,
+  "block_end": 1016,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "Now, only if we successfully determined a name, try to remove the variable",
+  "start_line": 1017,
+  "end_line": 1017,
+  "block_end": 1028,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- End Variable Removal ---",
+  "start_line": 1029,
+  "end_line": 1029,
+  "block_end": 1030,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- Read, Filter, Re-index (if needed), and Save the specific Target File Conditionally ---",
+  "start_line": 1031,
+  "end_line": 1031,
+  "block_end": 1142,
+  "child_count": 6
+ },
+ {
+  "parent": 1031,
+  "text": "Read the current content ONLY from the specific target file",
+  "start_line": 1033,
+  "end_line": 1033,
+  "block_end": 1049,
+  "child_count": 3
+ },
+ {
+  "parent": 1033,
+  "text": "Use -Delimiter ',' explicitly if needed, though usually auto-detected",
+  "start_line": 1037,
+  "end_line": 1037,
+  "block_end": 1041,
+  "child_count": 0
+ },
+ {
+  "parent": 1033,
+  "text": "Use 'continue' to skip to the next top-level command in the switch, or 'return'/'exit' if fatal",
+  "start_line": 1042,
+  "end_line": 1042,
+  "block_end": 1045,
+  "child_count": 0
+ },
+ {
+  "parent": 1033,
+  "text": "If file doesn't exist, there's nothing to remove from it. Content remains empty.",
+  "start_line": 1046,
+  "end_line": 1046,
+  "block_end": 1049,
+  "child_count": 0
+ },
+ {
+  "parent": 1031,
+  "text": "Filter the content read *FROM THE FILE*, excluding the row where content AND CustomName match CORRECTED: Use $contentToRemove variable defined earlier",
+  "start_line": 1050,
+  "end_line": 1051,
+  "block_end": 1054,
+  "child_count": 0
+ },
+ {
+  "parent": 1031,
+  "text": "Local variable for re-indexed data, needed ONLY if saving paths AND updating path vars/map later",
+  "start_line": 1055,
+  "end_line": 1055,
+  "block_end": 1057,
+  "child_count": 0
+ },
+ {
+  "parent": 1031,
+  "text": "Prepare content for Set-Content based on type",
+  "start_line": 1058,
+  "end_line": 1058,
+  "block_end": 1111,
+  "child_count": 6
+ },
+ {
+  "parent": 1058,
+  "text": "--- Re-index and Format for PATH file (Index, Path, CustomName) ---",
+  "start_line": 1062,
+  "end_line": 1062,
+  "block_end": 1064,
+  "child_count": 0
+ },
+ {
+  "parent": 1058,
+  "text": "CORRECT: Sort the filtered content ($contentToSave) before re-indexing",
+  "start_line": 1065,
+  "end_line": 1065,
+  "block_end": 1082,
+  "child_count": 1
+ },
+ {
+  "parent": 1065,
+  "text": "Handle potential $null values during replacement",
+  "start_line": 1075,
+  "end_line": 1075,
+  "block_end": 1082,
+  "child_count": 0
+ },
+ {
+  "parent": 1058,
+  "text": "--- MODIFIED: Re-index Commands Logic ---",
+  "start_line": 1083,
+  "end_line": 1083,
+  "block_end": 1085,
+  "child_count": 0
+ },
+ {
+  "parent": 1058,
+  "text": "Decide on sorting order, e.g., by original index if available & numeric, or by CustomName Sorting by CustomName for consistency:",
+  "start_line": 1086,
+  "end_line": 1087,
+  "block_end": 1104,
+  "child_count": 1
+ },
+ {
+  "parent": 1086,
+  "text": "Ensure properties exist before accessing",
+  "start_line": 1090,
+  "end_line": 1090,
+  "block_end": 1104,
+  "child_count": 0
+ },
+ {
+  "parent": 1058,
+  "text": "No need to assign to $reindexedContentToSave as commands don't use it post-save in your original code",
+  "start_line": 1105,
+  "end_line": 1105,
+  "block_end": 1108,
+  "child_count": 0
+ },
+ {
+  "parent": 1058,
+  "text": "break (or handle error)",
+  "start_line": 1109,
+  "end_line": 1109,
+  "block_end": 1111,
+  "child_count": 0
+ },
+ {
+  "parent": 1031,
+  "text": "Write the content array to the file, overwriting completely Use try/catch for the critical file write operation",
+  "start_line": 1112,
+  "end_line": 1113,
+  "block_end": 1140,
+  "child_count": 1
+ },
+ {
+  "parent": 1112,
+  "text": "Ensure directory exists before writing (important if file didn't exist)",
+  "start_line": 1115,
+  "end_line": 1115,
+  "block_end": 1140,
+  "child_count": 2
+ },
+ {
+  "parent": 1115,
+  "text": "This case means the file was empty or only contained the item we removed",
+  "start_line": 1126,
+  "end_line": 1126,
+  "block_end": 1127,
+  "child_count": 0
+ },
+ {
+  "parent": 1115,
+  "text": "Write just the header back if it was a known type, otherwise clear",
+  "start_line": 1128,
+  "end_line": 1128,
+  "block_end": 1140,
+  "child_count": 0
+ },
+ {
+  "parent": 1031,
+  "text": "--- End Re-index and Conditional Save ---",
+  "start_line": 1141,
+  "end_line": 1141,
+  "block_end": 1142,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "This catch handles errors from the file read/filter/reindex/save process",
+  "start_line": 1143,
+  "end_line": 1143,
+  "block_end": 1147,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- END OF FILE PROCESSING BLOCK ---",
+  "start_line": 1148,
+  "end_line": 1148,
+  "block_end": 1149,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- Post-Save Actions (Cache Invalidation, Variable Updates) ---",
+  "start_line": 1150,
+  "end_line": 1150,
+  "block_end": 1196,
+  "child_count": 5
+ },
+ {
+  "parent": 1150,
+  "text": "--- Cache Invalidation ---",
+  "start_line": 1152,
+  "end_line": 1152,
+  "block_end": 1161,
+  "child_count": 0
+ },
+ {
+  "parent": 1150,
+  "text": "--- Update Path Variables --- This ensures remaining variables reflect correct indices after removal",
+  "start_line": 1162,
+  "end_line": 1163,
+  "block_end": 1176,
+  "child_count": 0
+ },
+ {
+  "parent": 1150,
+  "text": "--- Update Global Map Cache --- Update $global:powerpathMappings only if it was the default list being modified",
+  "start_line": 1177,
+  "end_line": 1178,
+  "block_end": 1190,
+  "child_count": 1
+ },
+ {
+  "parent": 1177,
+  "text": "Create a new list from the reindexed objects, ensuring VariableInfo is populated",
+  "start_line": 1181,
+  "end_line": 1181,
+  "block_end": 1190,
+  "child_count": 0
+ },
+ {
+  "parent": 1150,
+  "text": "--- End Update Global Map Cache ---",
+  "start_line": 1191,
+  "end_line": 1191,
+  "block_end": 1193,
+  "child_count": 0
+ },
+ {
+  "parent": 1150,
+  "text": "No specific post-save actions needed for command removal besides removing the old variable (done earlier)",
+  "start_line": 1194,
+  "end_line": 1194,
+  "block_end": 1196,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- End Post-Save Actions ---",
+  "start_line": 1197,
+  "end_line": 1197,
+  "block_end": 1198,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- Final Success Message --- Determine group name from file path for message",
+  "start_line": 1199,
+  "end_line": 1200,
+  "block_end": 1210,
+  "child_count": 2
+ },
+ {
+  "parent": 1199,
+  "text": "Default file, no group name needed in message context",
+  "start_line": 1204,
+  "end_line": 1204,
+  "block_end": 1206,
+  "child_count": 0
+ },
+ {
+  "parent": 1199,
+  "text": "File has a group suffix",
+  "start_line": 1207,
+  "end_line": 1207,
+  "block_end": 1210,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "Construct the group part of the message",
+  "start_line": 1211,
+  "end_line": 1211,
+  "block_end": 1212,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "Determine item type for message (already determined earlier)",
+  "start_line": 1213,
+  "end_line": 1213,
+  "block_end": 1215,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "Construct and write message (using $groupMsg)",
+  "start_line": 1216,
+  "end_line": 1216,
+  "block_end": 1217,
+  "child_count": 0
+ },
+ {
+  "parent": 982,
+  "text": "--- End Final Success Message ---",
+  "start_line": 1218,
+  "end_line": 1218,
+  "block_end": 1219,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "This is the main Try block's catch",
+  "start_line": 1220,
+  "end_line": 1220,
+  "block_end": 1226,
+  "child_count": 2
+ },
+ {
+  "parent": 1220,
+  "text": "General catch for errors during the main removal process (after pre-checks) Specific errors should ideally be caught and handled within sub-blocks",
+  "start_line": 1222,
+  "end_line": 1223,
+  "block_end": 1224,
+  "child_count": 0
+ },
+ {
+  "parent": 1220,
+  "text": "Consider logging $PSItem.ScriptStackTrace here if debugging complex issues",
+  "start_line": 1225,
+  "end_line": 1225,
+  "block_end": 1226,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "endregion REMOVE COMMAND",
+  "start_line": 1227,
+  "end_line": 1227,
+  "block_end": 1229,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "region RENAME COMMAND",
+  "start_line": 1230,
+  "end_line": 1230,
+  "block_end": 1232,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Initial Parameter Validation ---",
+  "start_line": 1233,
+  "end_line": 1233,
+  "block_end": 1237,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "---=== PRE-CHECKS ===--- 1. Check if the last list operation was valid",
+  "start_line": 1238,
+  "end_line": 1239,
+  "block_end": 1247,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "2. Check if the list data exists",
+  "start_line": 1248,
+  "end_line": 1248,
+  "block_end": 1252,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Check required file info exists for paths",
+  "start_line": 1253,
+  "end_line": 1253,
+  "block_end": 1258,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Get the list content from globals",
+  "start_line": 1259,
+  "end_line": 1259,
+  "block_end": 1261,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Check Index validity AFTER getting mappings",
+  "start_line": 1262,
+  "end_line": 1262,
+  "block_end": 1264,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Find the specific item to rename",
+  "start_line": 1265,
+  "end_line": 1265,
+  "block_end": 1268,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Name Conflict Validation ---",
+  "start_line": 1269,
+  "end_line": 1269,
+  "block_end": 1303,
+  "child_count": 2
+ },
+ {
+  "parent": 1269,
+  "text": "For commands, check against CustomName only",
+  "start_line": 1275,
+  "end_line": 1275,
+  "block_end": 1282,
+  "child_count": 0
+ },
+ {
+  "parent": 1269,
+  "text": "For paths, check against CustomName AND derived VariableInfo.Name",
+  "start_line": 1283,
+  "end_line": 1283,
+  "block_end": 1303,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Check against Global/Env variables",
+  "start_line": 1304,
+  "end_line": 1304,
+  "block_end": 1310,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End Name Conflict Validation ---",
+  "start_line": 1311,
+  "end_line": 1311,
+  "block_end": 1312,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Wrap core rename logic in Try/Catch",
+  "start_line": 1313,
+  "end_line": 1313,
+  "block_end": 1637,
+  "child_count": 7
+ },
+ {
+  "parent": 1313,
+  "text": "--- Get Key Details from Old Mapping (BEFORE Removing Variable) ---",
+  "start_line": 1315,
+  "end_line": 1315,
+  "block_end": 1335,
+  "child_count": 0
+ },
+ {
+  "parent": 1313,
+  "text": "--- End Get Key Details ---",
+  "start_line": 1336,
+  "end_line": 1336,
+  "block_end": 1337,
+  "child_count": 0
+ },
+ {
+  "parent": 1313,
+  "text": "---=== Determine the Correct Target Data File ===---",
+  "start_line": 1338,
+  "end_line": 1338,
+  "block_end": 1362,
+  "child_count": 0
+ },
+ {
+  "parent": 1313,
+  "text": "---=== End Target Data File Determination ===---",
+  "start_line": 1363,
+  "end_line": 1363,
+  "block_end": 1364,
+  "child_count": 0
+ },
+ {
+  "parent": 1313,
+  "text": "--- Handle Old Variable ---",
+  "start_line": 1365,
+  "end_line": 1365,
+  "block_end": 1366,
+  "child_count": 0
+ },
+ {
+  "parent": 1313,
+  "text": "Determine the OLD variable name based on type",
+  "start_line": 1367,
+  "end_line": 1367,
+  "block_end": 1634,
+  "child_count": 2
+ },
+ {
+  "parent": 1367,
+  "text": "Paths use VariableInfo.Name primarily",
+  "start_line": 1371,
+  "end_line": 1371,
+  "block_end": 1377,
+  "child_count": 0
+ },
+ {
+  "parent": 1367,
+  "text": "Derivation fallback is less reliable for finding variable name, handled if needed during add/list",
+  "start_line": 1378,
+  "end_line": 1378,
+  "block_end": 1634,
+  "child_count": 0
+ },
+ {
+  "parent": 1313,
+  "text": "Optionally add stack trace for debugging: Write-Error ($PSItem | Format-List -Force | Out-String)",
+  "start_line": 1635,
+  "end_line": 1635,
+  "block_end": 1637,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "endregion RENAME COMMAND",
+  "start_line": 1638,
+  "end_line": 1638,
+  "block_end": 1640,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "------------------------------------------------------------- Command Object Structure (Blueprint) ------------------------------------------------------------- This defines the standard object structure we will use to store the outcome of executing each command.",
+  "start_line": 1641,
+  "end_line": 1645,
+  "block_end": 1646,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "[PSCustomObject]@{ OriginalIndex = $index # Integer: 1-based index from the original CSV ListName = $listName # String: Name of the command list CommandString = $commandString # String: The actual command executed CustomName = $customName # String: User-defined name or CommandString RuntimeIndex = 1 # Integer: Which iteration this is (for future -Repeat feature, defaults to 1) Status = 'NotRun' | 'Success' | 'Failure' | 'Skipped' # String: Execution outcome StartTime = $null # DateTime: When execution started EndTime = $null # DateTime: When execution finished Duration = $null # TimeSpan: Total execution time Output = $null # String[] or String: Captured StdOut/StdErr ErrorRecord = $null # System.Management.Automation.ErrorRecord: Error details if Status='Failure' ExecutedInParallel = $false # Boolean: Whether it ran via ForEach-Object -Parallel } -------------------------------------------------------------",
+  "start_line": 1647,
+  "end_line": 1661,
+  "block_end": 1662,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "region RUN COMMAND",
+  "start_line": 1663,
+  "end_line": 1663,
+  "block_end": 1664,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Get Inputs from Parameters ---",
+  "start_line": 1665,
+  "end_line": 1665,
+  "block_end": 1680,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End Get Inputs ---",
+  "start_line": 1681,
+  "end_line": 1681,
+  "block_end": 1682,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Determine Iteration Count ---",
+  "start_line": 1683,
+  "end_line": 1683,
+  "block_end": 1692,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End Determine Iteration Count ---",
+  "start_line": 1693,
+  "end_line": 1693,
+  "block_end": 1694,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Resolve Inputs into Actions ---",
+  "start_line": 1695,
+  "end_line": 1695,
+  "block_end": 1745,
+  "child_count": 6
+ },
+ {
+  "parent": 1695,
+  "text": "--- (Existing Input Resolution Logic - Creates $actionsToPerform) --- (Includes checks for direct path, command var, list file, ambiguity prompt)",
+  "start_line": 1700,
+  "end_line": 1701,
+  "block_end": 1704,
+  "child_count": 0
+ },
+ {
+  "parent": 1695,
+  "text": "1. Direct Path Check",
+  "start_line": 1705,
+  "end_line": 1705,
+  "block_end": 1712,
+  "child_count": 0
+ },
+ {
+  "parent": 1695,
+  "text": "2. Command Variable Check",
+  "start_line": 1713,
+  "end_line": 1713,
+  "block_end": 1717,
+  "child_count": 0
+ },
+ {
+  "parent": 1695,
+  "text": "3. List File Check",
+  "start_line": 1718,
+  "end_line": 1718,
+  "block_end": 1722,
+  "child_count": 0
+ },
+ {
+  "parent": 1695,
+  "text": "4. Determine Action",
+  "start_line": 1723,
+  "end_line": 1723,
+  "block_end": 1730,
+  "child_count": 0
+ },
+ {
+  "parent": 1695,
+  "text": "5. Add Action",
+  "start_line": 1731,
+  "end_line": 1731,
+  "block_end": 1745,
+  "child_count": 1
+ },
+ {
+  "parent": 1731,
+  "text": "--- (End of Input Resolution Snippet) ---",
+  "start_line": 1739,
+  "end_line": 1739,
+  "block_end": 1745,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- End Resolve Inputs ---",
+  "start_line": 1746,
+  "end_line": 1746,
+  "block_end": 1747,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Main Execution ---",
+  "start_line": 1748,
+  "end_line": 1748,
+  "block_end": 1752,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Determine if this is a single command variable run",
+  "start_line": 1753,
+  "end_line": 1753,
+  "block_end": 2336,
+  "child_count": 4
+ },
+ {
+  "parent": 1753,
+  "text": "Capture caller's global variables ONCE if needed",
+  "start_line": 1764,
+  "end_line": 1764,
+  "block_end": 1773,
+  "child_count": 0
+ },
+ {
+  "parent": 1753,
+  "text": "--- Main Action Execution Loop ---",
+  "start_line": 1774,
+  "end_line": 1774,
+  "block_end": 2330,
+  "child_count": 5
+ },
+ {
+  "parent": 1774,
+  "text": "--- Prepare the list of CommandInfo objects for this action ---",
+  "start_line": 1792,
+  "end_line": 1792,
+  "block_end": 1847,
+  "child_count": 0
+ },
+ {
+  "parent": 1774,
+  "text": "--- End Preparation ---",
+  "start_line": 1848,
+  "end_line": 1848,
+  "block_end": 1849,
+  "child_count": 0
+ },
+ {
+  "parent": 1774,
+  "text": "--- Execute the Prepared Commands ---",
+  "start_line": 1850,
+  "end_line": 1850,
+  "block_end": 2312,
+  "child_count": 11
+ },
+ {
+  "parent": 1850,
+  "text": "region --- Sequential Execution ---",
+  "start_line": 1864,
+  "end_line": 1864,
+  "block_end": 1866,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "--- Define output control vars ONCE per command --- $isSingleCommandRun was determined before the action loop Determine if live output should be shown for this specific command",
+  "start_line": 1867,
+  "end_line": 1869,
+  "block_end": 1870,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "---------------------------------------------------",
+  "start_line": 1871,
+  "end_line": 1871,
+  "block_end": 2101,
+  "child_count": 20
+ },
+ {
+  "parent": 1871,
+  "text": "Create a basic skipped result for reporting",
+  "start_line": 1876,
+  "end_line": 1876,
+  "block_end": 1877,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- FIX: Add standard result properties before setting ---",
+  "start_line": 1878,
+  "end_line": 1878,
+  "block_end": 1884,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- END FIX ---",
+  "start_line": 1885,
+  "end_line": 1885,
+  "block_end": 1891,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- >>> Condition Evaluation Logic (Handles Variables & Lists) <<< ---",
+  "start_line": 1892,
+  "end_line": 1892,
+  "block_end": 1897,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Step 1: Get the Condition String Source ---",
+  "start_line": 1898,
+  "end_line": 1898,
+  "block_end": 1932,
+  "child_count": 2
+ },
+ {
+  "parent": 1898,
+  "text": "For lists, the condition comes directly from the CSV row data (if exists)",
+  "start_line": 1900,
+  "end_line": 1900,
+  "block_end": 1908,
+  "child_count": 0
+ },
+ {
+  "parent": 1898,
+  "text": "For command variables, look up the condition in the DEFAULT CSV",
+  "start_line": 1909,
+  "end_line": 1909,
+  "block_end": 1932,
+  "child_count": 1
+ },
+ {
+  "parent": 1909,
+  "text": "Continue, $conditionString remains null",
+  "start_line": 1926,
+  "end_line": 1926,
+  "block_end": 1932,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Step 2: Evaluate the obtained Condition String (if any) ---",
+  "start_line": 1933,
+  "end_line": 1933,
+  "block_end": 1970,
+  "child_count": 3
+ },
+ {
+  "parent": 1933,
+  "text": "First, check for {$VarName} pattern",
+  "start_line": 1935,
+  "end_line": 1935,
+  "block_end": 1954,
+  "child_count": 2
+ },
+ {
+  "parent": 1935,
+  "text": "Execute the PP Variable",
+  "start_line": 1941,
+  "end_line": 1941,
+  "block_end": 1950,
+  "child_count": 0
+ },
+ {
+  "parent": 1935,
+  "text": "Fall through to standard evaluation below",
+  "start_line": 1951,
+  "end_line": 1951,
+  "block_end": 1954,
+  "child_count": 0
+ },
+ {
+  "parent": 1933,
+  "text": "If not handled by pattern, evaluate as standard PowerShell",
+  "start_line": 1955,
+  "end_line": 1955,
+  "block_end": 1965,
+  "child_count": 0
+ },
+ {
+  "parent": 1933,
+  "text": "Condition string was empty/null from source, default to run",
+  "start_line": 1966,
+  "end_line": 1966,
+  "block_end": 1970,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "Store the final results of the evaluation IF a condition existed initially.",
+  "start_line": 1971,
+  "end_line": 1971,
+  "block_end": 1987,
+  "child_count": 2
+ },
+ {
+  "parent": 1971,
+  "text": "This checks if a condition was originally present either in the CSV row OR retrieved for a command variable. We store the OUTCOME ($shouldRun, $conditionEvaluationError) and the original string ($conditionString).",
+  "start_line": 1973,
+  "end_line": 1974,
+  "block_end": 1980,
+  "child_count": 0
+ },
+ {
+  "parent": 1971,
+  "text": "Ensure properties are removed if no condition was ever present for this cmdInfo (Prevents carrying over properties if $cmdInfo object was reused - safer)",
+  "start_line": 1981,
+  "end_line": 1982,
+  "block_end": 1987,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Skip Handling (uses $shouldRun determined above) ---",
+  "start_line": 1988,
+  "end_line": 1988,
+  "block_end": 2024,
+  "child_count": 5
+ },
+ {
+  "parent": 1988,
+  "text": "Create the skipped result object (using Add-Member fix)",
+  "start_line": 1991,
+  "end_line": 1991,
+  "block_end": 1996,
+  "child_count": 0
+ },
+ {
+  "parent": 1988,
+  "text": "--- Handle skip result (Store or Print) ---",
+  "start_line": 1997,
+  "end_line": 1997,
+  "block_end": 2004,
+  "child_count": 0
+ },
+ {
+  "parent": 1988,
+  "text": "--- End skip result handling ---",
+  "start_line": 2005,
+  "end_line": 2005,
+  "block_end": 2007,
+  "child_count": 0
+ },
+ {
+  "parent": 1988,
+  "text": "$isSingleCommandAction = ($action.Type -eq 'command') $showOutput = (-not $isSingleCommandAction) -or ($VerbosePreference -ne 'SilentlyContinue') # Keep visibility logic if desired",
+  "start_line": 2008,
+  "end_line": 2009,
+  "block_end": 2020,
+  "child_count": 3
+ },
+ {
+  "parent": 2008,
+  "text": "Determine color: Yellow if evaluation failed, Red if condition was just false",
+  "start_line": 2011,
+  "end_line": 2011,
+  "block_end": 2012,
+  "child_count": 0
+ },
+ {
+  "parent": 2008,
+  "text": "Write the line using CommandString and the condition string",
+  "start_line": 2013,
+  "end_line": 2013,
+  "block_end": 2015,
+  "child_count": 0
+ },
+ {
+  "parent": 2008,
+  "text": "If there was an error evaluating, show it as a warning",
+  "start_line": 2016,
+  "end_line": 2016,
+  "block_end": 2020,
+  "child_count": 0
+ },
+ {
+  "parent": 1988,
+  "text": "--- End Ideal Skip Output ---",
+  "start_line": 2021,
+  "end_line": 2021,
+  "block_end": 2024,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- <<< END CORRECTED Condition Evaluation Logic <<< ---",
+  "start_line": 2025,
+  "end_line": 2025,
+  "block_end": 2027,
+  "child_count": 1
+ },
+ {
+  "parent": 2025,
+  "text": "--- Execute If Not Skipped ---",
+  "start_line": 2026,
+  "end_line": 2026,
+  "block_end": 2027,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Ideal Output: Step 2: Print Running Line --- $isSingleCommandAction = ($action.Type -eq 'command') $showOutput = (-not $isSingleCommandAction) -or ($VerbosePreference -ne 'SilentlyContinue') # Visibility logic",
+  "start_line": 2028,
+  "end_line": 2030,
+  "block_end": 2034,
+  "child_count": 1
+ },
+ {
+  "parent": 2028,
+  "text": "Use CommandString, no status icon or time here",
+  "start_line": 2032,
+  "end_line": 2032,
+  "block_end": 2034,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- End Step 2 ---",
+  "start_line": 2035,
+  "end_line": 2035,
+  "block_end": 2036,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Execute the Command (Invoke-CommandTracked captures output) --- Ensure Invoke-CommandTracked captures StdOut/StdErr into $cmdResult.Output",
+  "start_line": 2037,
+  "end_line": 2038,
+  "block_end": 2040,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- End Execution ---",
+  "start_line": 2041,
+  "end_line": 2041,
+  "block_end": 2042,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Ideal Output: Step 3: Print Captured Output/Error ---",
+  "start_line": 2043,
+  "end_line": 2043,
+  "block_end": 2060,
+  "child_count": 3
+ },
+ {
+  "parent": 2043,
+  "text": "Write the captured output directly",
+  "start_line": 2046,
+  "end_line": 2046,
+  "block_end": 2053,
+  "child_count": 0
+ },
+ {
+  "parent": 2043,
+  "text": "If it failed but output was empty, show the ErrorRecord",
+  "start_line": 2054,
+  "end_line": 2054,
+  "block_end": 2057,
+  "child_count": 0
+ },
+ {
+  "parent": 2043,
+  "text": "Optional: Add spacing if output was displayed if (-not [string]::IsNullOrWhiteSpace($cmdResult.Output)) { Write-Host \"\" }",
+  "start_line": 2058,
+  "end_line": 2059,
+  "block_end": 2060,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- End Step 3 ---",
+  "start_line": 2061,
+  "end_line": 2061,
+  "block_end": 2062,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Update Counters and Handle BreakOnError ---",
+  "start_line": 2063,
+  "end_line": 2063,
+  "block_end": 2073,
+  "child_count": 1
+ },
+ {
+  "parent": 2063,
+  "text": "If it failed, *now* check BreakOnError (original logic is fine)",
+  "start_line": 2068,
+  "end_line": 2068,
+  "block_end": 2073,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- End Conditional Output ---",
+  "start_line": 2074,
+  "end_line": 2074,
+  "block_end": 2075,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- Handle execution result (Store or Print) ---",
+  "start_line": 2076,
+  "end_line": 2076,
+  "block_end": 2093,
+  "child_count": 2
+ },
+ {
+  "parent": 2076,
+  "text": "$script:StopPPRun = $true",
+  "start_line": 2080,
+  "end_line": 2080,
+  "block_end": 2082,
+  "child_count": 0
+ },
+ {
+  "parent": 2076,
+  "text": "Print live output only if storing for list report if ($showLiveOutput) { # if (-not [string]::IsNullOrWhiteSpace($cmdResult.Output)) { # Write-Host $cmdResult.Output # Write-Host \"\" # } if ($cmdResult.Status -eq 'Failure' -and [string]::IsNullOrWhiteSpace($cmdResult.Output) -and $null -ne $cmdResult.ErrorRecord) { Write-Warning ($cmdResult.ErrorRecord | Out-String).Trim() } }",
+  "start_line": 2083,
+  "end_line": 2092,
+  "block_end": 2093,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "--- End execution result handling ---",
+  "start_line": 2094,
+  "end_line": 2094,
+  "block_end": 2099,
+  "child_count": 1
+ },
+ {
+  "parent": 2094,
+  "text": "Add result only if executed",
+  "start_line": 2097,
+  "end_line": 2097,
+  "block_end": 2099,
+  "child_count": 0
+ },
+ {
+  "parent": 1871,
+  "text": "endregion Sequential",
+  "start_line": 2100,
+  "end_line": 2100,
+  "block_end": 2101,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "region Parallel Execution (Integrated from User's Previous Version) ---",
+  "start_line": 2102,
+  "end_line": 2102,
+  "block_end": 2110,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "Mark commands for parallel execution (for reporting)",
+  "start_line": 2111,
+  "end_line": 2111,
+  "block_end": 2116,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "Use $using:executionModulePath defined earlier",
+  "start_line": 2117,
+  "end_line": 2117,
+  "block_end": 2264,
+  "child_count": 9
+ },
+ {
+  "parent": 2117,
+  "text": "--- Inside the Parallel Thread ---",
+  "start_line": 2119,
+  "end_line": 2119,
+  "block_end": 2137,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "--- Step 1: Get the Condition String Source ---",
+  "start_line": 2138,
+  "end_line": 2138,
+  "block_end": 2164,
+  "child_count": 3
+ },
+ {
+  "parent": 2138,
+  "text": "Write-Host \"PARALLEL-DEBUG: Found Condition property from list item '$($cmdInfo.CustomName)'.\"",
+  "start_line": 2142,
+  "end_line": 2142,
+  "block_end": 2143,
+  "child_count": 0
+ },
+ {
+  "parent": 2138,
+  "text": "Write-Host \"PARALLEL-DEBUG: No Condition property found for list item '$($cmdInfo.CustomName)'.\"",
+  "start_line": 2144,
+  "end_line": 2144,
+  "block_end": 2147,
+  "child_count": 0
+ },
+ {
+  "parent": 2138,
+  "text": "Write-Host \"PARALLEL-DEBUG: Action type is 'command' for '$($cmdInfo.CustomName)', looking up condition in default CSV...\"",
+  "start_line": 2148,
+  "end_line": 2148,
+  "block_end": 2164,
+  "child_count": 1
+ },
+ {
+  "parent": 2148,
+  "text": "Write-Host \"PARALLEL-DEBUG: Found condition in default CSV for '$($cmdInfo.CustomName)'.\"",
+  "start_line": 2156,
+  "end_line": 2156,
+  "block_end": 2164,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "--- Step 2: Evaluate the obtained Condition String (if any) ---",
+  "start_line": 2165,
+  "end_line": 2165,
+  "block_end": 2220,
+  "child_count": 4
+ },
+ {
+  "parent": 2165,
+  "text": "First, check for {$VarName} pattern",
+  "start_line": 2167,
+  "end_line": 2167,
+  "block_end": 2200,
+  "child_count": 1
+ },
+ {
+  "parent": 2167,
+  "text": "Write-Host \"PARALLEL-DEBUG: Condition matches variable pattern for `$${variableName}.\" IMPORTANT: Access GVA-injected variables directly, no need for Get-Variable -Scope Global here Assumes GVA injection happened before this point.",
+  "start_line": 2170,
+  "end_line": 2172,
+  "block_end": 2200,
+  "child_count": 3
+ },
+ {
+  "parent": 2170,
+  "text": "Execute the PP Variable Write-Host \"PARALLEL-DEBUG: Variable `$${variableName}` is a PPVar. Executing...\"",
+  "start_line": 2178,
+  "end_line": 2179,
+  "block_end": 2191,
+  "child_count": 2
+ },
+ {
+  "parent": 2178,
+  "text": "Note: Make sure $variableValue actually holds the ScriptBlock",
+  "start_line": 2181,
+  "end_line": 2181,
+  "block_end": 2184,
+  "child_count": 0
+ },
+ {
+  "parent": 2178,
+  "text": "Write-Host \"PARALLEL-DEBUG: PP Variable execution result: $result -> shouldRun: $shouldRun\"",
+  "start_line": 2185,
+  "end_line": 2185,
+  "block_end": 2191,
+  "child_count": 0
+ },
+ {
+  "parent": 2170,
+  "text": "Write-Host \"PARALLEL-DEBUG: Variable `$${variableName}` not found/not PPVar/not ScriptBlock. Evaluating '$conditionString' as standard PS.\" Fall through",
+  "start_line": 2192,
+  "end_line": 2193,
+  "block_end": 2195,
+  "child_count": 0
+ },
+ {
+  "parent": 2170,
+  "text": "Write-Host \"PARALLEL-DEBUG: Global Variable `$${variableName}` not found. Evaluating '$conditionString' as standard PS.\" Fall through",
+  "start_line": 2196,
+  "end_line": 2197,
+  "block_end": 2200,
+  "child_count": 0
+ },
+ {
+  "parent": 2165,
+  "text": "If not handled by pattern, evaluate as standard PowerShell",
+  "start_line": 2201,
+  "end_line": 2201,
+  "block_end": 2215,
+  "child_count": 1
+ },
+ {
+  "parent": 2201,
+  "text": "Write-Host \"PARALLEL-DEBUG: Evaluating condition as standard PS: $conditionString\"",
+  "start_line": 2203,
+  "end_line": 2203,
+  "block_end": 2215,
+  "child_count": 1
+ },
+ {
+  "parent": 2203,
+  "text": "Write-Host \"PARALLEL-DEBUG: Standard PS condition result: $result -> shouldRun: $shouldRun\"",
+  "start_line": 2208,
+  "end_line": 2208,
+  "block_end": 2215,
+  "child_count": 0
+ },
+ {
+  "parent": 2165,
+  "text": "Condition string was empty/null from source, default to run",
+  "start_line": 2216,
+  "end_line": 2216,
+  "block_end": 2217,
+  "child_count": 0
+ },
+ {
+  "parent": 2165,
+  "text": "Write-Host \"PARALLEL-DEBUG: No condition string found or string was empty, defaulting to run.\"",
+  "start_line": 2218,
+  "end_line": 2218,
+  "block_end": 2220,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "--- Skip Handling (uses $shouldRun determined above) ---",
+  "start_line": 2221,
+  "end_line": 2221,
+  "block_end": 2234,
+  "child_count": 1
+ },
+ {
+  "parent": 2221,
+  "text": "Create the skipped result object (using Add-Member fix)",
+  "start_line": 2223,
+  "end_line": 2223,
+  "block_end": 2234,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "--- <<< END CORRECTED Parallel Condition Evaluation Logic <<< ---",
+  "start_line": 2235,
+  "end_line": 2235,
+  "block_end": 2237,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "Check for break signal BEFORE executing",
+  "start_line": 2238,
+  "end_line": 2238,
+  "block_end": 2249,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "Execute the command Capture output is generally true for parallel to get results back",
+  "start_line": 2250,
+  "end_line": 2251,
+  "block_end": 2253,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "Signal break AFTER failure, if applicable",
+  "start_line": 2254,
+  "end_line": 2254,
+  "block_end": 2259,
+  "child_count": 0
+ },
+ {
+  "parent": 2117,
+  "text": "--- End of Parallel Thread ---",
+  "start_line": 2260,
+  "end_line": 2260,
+  "block_end": 2264,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "Post-Parallel Processing",
+  "start_line": 2265,
+  "end_line": 2265,
+  "block_end": 2293,
+  "child_count": 2
+ },
+ {
+  "parent": 2265,
+  "text": "Add results to the main list used for reporting",
+  "start_line": 2270,
+  "end_line": 2270,
+  "block_end": 2271,
+  "child_count": 0
+ },
+ {
+  "parent": 2265,
+  "text": "Increment counters based on the actual status returned from the thread",
+  "start_line": 2272,
+  "end_line": 2272,
+  "block_end": 2293,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "=== Calculate FINAL counts AFTER iteration loop ===",
+  "start_line": 2294,
+  "end_line": 2294,
+  "block_end": 2298,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "====================================================",
+  "start_line": 2299,
+  "end_line": 2299,
+  "block_end": 2300,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "--- Summary for this Action ---",
+  "start_line": 2301,
+  "end_line": 2301,
+  "block_end": 2301,
+  "child_count": 0
+ },
+ {
+  "parent": 1850,
+  "text": "--- Consolidated Processing Footer (with counts) ---",
+  "start_line": 2302,
+  "end_line": 2302,
+  "block_end": 2312,
+  "child_count": 3
+ },
+ {
+  "parent": 2302,
+  "text": "Use FINAL counts here",
+  "start_line": 2305,
+  "end_line": 2305,
+  "block_end": 2308,
+  "child_count": 0
+ },
+ {
+  "parent": 2302,
+  "text": "Use FINAL counts and total results count",
+  "start_line": 2309,
+  "end_line": 2309,
+  "block_end": 2310,
+  "child_count": 0
+ },
+ {
+  "parent": 2302,
+  "text": "You might want $listTotalPotentialCommands * $iterationCount for the 'defined' part if relevant",
+  "start_line": 2311,
+  "end_line": 2311,
+  "block_end": 2312,
+  "child_count": 0
+ },
+ {
+  "parent": 1774,
+  "text": "--- End Consolidated Footer ---",
+  "start_line": 2313,
+  "end_line": 2313,
+  "block_end": 2324,
+  "child_count": 1
+ },
+ {
+  "parent": 2313,
+  "text": "Store results for the final report",
+  "start_line": 2315,
+  "end_line": 2315,
+  "block_end": 2324,
+  "child_count": 0
+ },
+ {
+  "parent": 1774,
+  "text": "--- End Execute Prepared Commands ---",
+  "start_line": 2325,
+  "end_line": 2325,
+  "block_end": 2330,
+  "child_count": 0
+ },
+ {
+  "parent": 1753,
+  "text": "--- Cleanup Env Var ---",
+  "start_line": 2331,
+  "end_line": 2331,
+  "block_end": 2333,
+  "child_count": 0
+ },
+ {
+  "parent": 1753,
+  "text": "--- End Cleanup ---",
+  "start_line": 2334,
+  "end_line": 2334,
+  "block_end": 2336,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "--- Final Report Generation ---",
+  "start_line": 2337,
+  "end_line": 2337,
+  "block_end": 2338,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Write-Host \"`n--- Command Status Report ---\" -ForegroundColor Cyan",
+  "start_line": 2339,
+  "end_line": 2339,
+  "block_end": 2447,
+  "child_count": 1
+ },
+ {
+  "parent": 2339,
+  "text": "$currentIter = $iterGroup.Name $headerSuffix = if ($iterationCount -gt 1) { \" [Iteration $currentIter/$iterationCount]\" } else { \"\" } $header = \"List/Command: [$reportListName]$headerSuffix\" Write-Host $header -ForegroundColor Blue",
+  "start_line": 2346,
+  "end_line": 2349,
+  "block_end": 2447,
+  "child_count": 6
+ },
+ {
+  "parent": 2346,
+  "text": "Reset flag for each result",
+  "start_line": 2353,
+  "end_line": 2353,
+  "block_end": 2354,
+  "child_count": 0
+ },
+ {
+  "parent": 2346,
+  "text": "--- Prepare placeholder for condition details ---",
+  "start_line": 2355,
+  "end_line": 2355,
+  "block_end": 2357,
+  "child_count": 0
+ },
+ {
+  "parent": 2346,
+  "text": "--- 1. Determine Base Info (Same as before) ---",
+  "start_line": 2358,
+  "end_line": 2358,
+  "block_end": 2365,
+  "child_count": 0
+ },
+ {
+  "parent": 2346,
+  "text": "Show duration only if executed (Success or Failure)",
+  "start_line": 2366,
+  "end_line": 2366,
+  "block_end": 2371,
+  "child_count": 0
+ },
+ {
+  "parent": 2346,
+  "text": "--- 2. Check for Condition Info and Prepare Details ---",
+  "start_line": 2372,
+  "end_line": 2372,
+  "block_end": 2404,
+  "child_count": 2
+ },
+ {
+  "parent": 2372,
+  "text": "Determine Status Text & Color",
+  "start_line": 2380,
+  "end_line": 2380,
+  "block_end": 2395,
+  "child_count": 0
+ },
+ {
+  "parent": 2372,
+  "text": "Store details needed for printing",
+  "start_line": 2396,
+  "end_line": 2396,
+  "block_end": 2404,
+  "child_count": 0
+ },
+ {
+  "parent": 2346,
+  "text": "--- 3. Append OTHER details ONLY IF Manual Print is NOT needed ---",
+  "start_line": 2405,
+  "end_line": 2405,
+  "block_end": 2447,
+  "child_count": 3
+ },
+ {
+  "parent": 2405,
+  "text": "Keep your existing logic for appending Error/Skipped details here",
+  "start_line": 2407,
+  "end_line": 2407,
+  "block_end": 2421,
+  "child_count": 1
+ },
+ {
+  "parent": 2407,
+  "text": "--- Original Failure Handling ---",
+  "start_line": 2409,
+  "end_line": 2409,
+  "block_end": 2421,
+  "child_count": 2
+ },
+ {
+  "parent": 2409,
+  "text": "... (CommandNotFoundException check) ...",
+  "start_line": 2411,
+  "end_line": 2411,
+  "block_end": 2417,
+  "child_count": 0
+ },
+ {
+  "parent": 2409,
+  "text": "--- End Original Failure Handling ---",
+  "start_line": 2418,
+  "end_line": 2418,
+  "block_end": 2421,
+  "child_count": 0
+ },
+ {
+  "parent": 2405,
+  "text": "IMPORTANT: No need for the SkippedCondition elseif here anymore, because it's handled by $script:printConditionManually being true.",
+  "start_line": 2422,
+  "end_line": 2423,
+  "block_end": 2424,
+  "child_count": 0
+ },
+ {
+  "parent": 2405,
+  "text": "--- 4. Printing ---",
+  "start_line": 2425,
+  "end_line": 2425,
+  "block_end": 2447,
+  "child_count": 6
+ },
+ {
+  "parent": 2425,
+  "text": "Print base line (Icon, Index, Duration, Cmd)",
+  "start_line": 2427,
+  "end_line": 2427,
+  "block_end": 2428,
+  "child_count": 0
+ },
+ {
+  "parent": 2425,
+  "text": "Print condition part: \" | C=X [ script ]\"",
+  "start_line": 2429,
+  "end_line": 2429,
+  "block_end": 2431,
+  "child_count": 0
+ },
+ {
+  "parent": 2425,
+  "text": "Print condition script itself in brackets, default color (or choose Gray)",
+  "start_line": 2432,
+  "end_line": 2432,
+  "block_end": 2433,
+  "child_count": 0
+ },
+ {
+  "parent": 2425,
+  "text": "Append reason if eval failed",
+  "start_line": 2434,
+  "end_line": 2434,
+  "block_end": 2437,
+  "child_count": 0
+ },
+ {
+  "parent": 2425,
+  "text": "Terminate line",
+  "start_line": 2438,
+  "end_line": 2438,
+  "block_end": 2440,
+  "child_count": 0
+ },
+ {
+  "parent": 2425,
+  "text": "Default behavior: Print the fully constructed $outputLine for results without conditions",
+  "start_line": 2441,
+  "end_line": 2441,
+  "block_end": 2447,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "Write-Host \"-----------------------------\" -ForegroundColor Cyan",
+  "start_line": 2448,
+  "end_line": 2448,
+  "block_end": 2449,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "endregion",
+  "start_line": 2450,
+  "end_line": 2450,
+  "block_end": 2452,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "region SET COMMAND",
+  "start_line": 2453,
+  "end_line": 2453,
+  "block_end": 2559,
+  "child_count": 13
+ },
+ {
+  "parent": 2453,
+  "text": "--- Logic for setting/updating condition ---",
+  "start_line": 2456,
+  "end_line": 2456,
+  "block_end": 2458,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "1. Determine Target Command CSV File",
+  "start_line": 2459,
+  "end_line": 2459,
+  "block_end": 2469,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "2. Check if CSV exists",
+  "start_line": 2470,
+  "end_line": 2470,
+  "block_end": 2476,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "3. Import the CSV data",
+  "start_line": 2477,
+  "end_line": 2477,
+  "block_end": 2487,
+  "child_count": 1
+ },
+ {
+  "parent": 2477,
+  "text": "Use -LiteralPath to handle potential special characters",
+  "start_line": 2480,
+  "end_line": 2480,
+  "block_end": 2487,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "Handle potentially empty CSV after import",
+  "start_line": 2488,
+  "end_line": 2488,
+  "block_end": 2490,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "4. Find the command by CustomName (case-sensitive match for reliability) If you want case-insensitive, use: -eq $Name",
+  "start_line": 2491,
+  "end_line": 2492,
+  "block_end": 2494,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "5. Handle if command not found",
+  "start_line": 2495,
+  "end_line": 2495,
+  "block_end": 2500,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "Note: Assuming no duplicates due to 'add' overwriting. If duplicates were possible, check $commandToUpdate.Count here.",
+  "start_line": 2501,
+  "end_line": 2501,
+  "block_end": 2502,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "6. Ensure 'Condition' Column exists in the data",
+  "start_line": 2503,
+  "end_line": 2503,
+  "block_end": 2521,
+  "child_count": 2
+ },
+ {
+  "parent": 2503,
+  "text": "Add empty string as default. Null might cause issues with Export-Csv in some PS versions.",
+  "start_line": 2507,
+  "end_line": 2507,
+  "block_end": 2512,
+  "child_count": 0
+ },
+ {
+  "parent": 2503,
+  "text": "This state is unlikely if commandToUpdate was found, but good to acknowledge. We might need to add the Condition property directly to commandToUpdate if $commands was empty. Let's ensure the property exists on the specific object just in case.",
+  "start_line": 2513,
+  "end_line": 2515,
+  "block_end": 2521,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "7. Update the Condition property for the target command",
+  "start_line": 2522,
+  "end_line": 2522,
+  "block_end": 2531,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "8. Export the modified data back to CSV",
+  "start_line": 2532,
+  "end_line": 2532,
+  "block_end": 2554,
+  "child_count": 2
+ },
+ {
+  "parent": 2532,
+  "text": "Ensure consistent export even if only one command exists",
+  "start_line": 2535,
+  "end_line": 2535,
+  "block_end": 2540,
+  "child_count": 0
+ },
+ {
+  "parent": 2532,
+  "text": "Select only expected columns to avoid extra PSObject properties, ensure Condition is included if added",
+  "start_line": 2541,
+  "end_line": 2541,
+  "block_end": 2554,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "--- End logic for Set Condition ---",
+  "start_line": 2555,
+  "end_line": 2555,
+  "block_end": 2557,
+  "child_count": 0
+ },
+ {
+  "parent": 2453,
+  "text": "Add more 'elseif ($PSCmdlet.ParameterSetName -eq ...)' here for future 'set' operations",
+  "start_line": 2558,
+  "end_line": 2558,
+  "block_end": 2559,
+  "child_count": 0
+ },
+ {
+  "parent": 494,
+  "text": "endregion",
+  "start_line": 2560,
+  "end_line": 2560,
+  "block_end": 2566,
+  "child_count": 0
+ }
+]
