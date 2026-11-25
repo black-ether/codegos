@@ -15,7 +15,7 @@ func TestFixtureBoundaries(t *testing.T) {
 		t.Fatal(err)
 	}
 	roots := buildTree(nodes)
-	if len(roots) != 4 || len(roots[0].Children) != 2 || roots[0].Children[0].EndLine != 3 || blockEnd(roots[0], 15) != 7 || blockEnd(roots[0].Children[1], 15) != 6 || roots[1].StartLine != 9 || roots[1].Children[0].EndLine != 11 {
+	if len(roots) != 4 || len(roots[0].Children) != 1 || roots[0].Children[0].EndLine != 3 || blockEnd(roots[0], 15) != 7 || blockEnd(roots[0].Children[0].Children[0], 15) != 6 || roots[1].StartLine != 9 || roots[1].Children[0].EndLine != 11 {
 		t.Fatalf("incorrect region nesting or bounds: %+v", roots)
 	}
 }

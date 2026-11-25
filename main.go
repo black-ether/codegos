@@ -75,6 +75,23 @@ func main() {
 		os.Exit(1)
 	}
 	tree := buildTree(comments)
+	if options.tail {
+		start := 1
+		if len(comments) > 0 {
+			last := comments[len(comments)-1]
+			if last.directive != "endregion" {
+				fmt.Println("No trailing region boundary")
+				return
+			}
+			start = last.EndLine + 1
+		}
+		if start <= len(lines) && strings.TrimSpace(strings.Join(lines[start-1:], "\n")) != "" {
+			fmt.Printf("Generated trailing source range: show %d-%d\n", start, len(lines))
+		} else {
+			fmt.Println("No trailing source")
+		}
+		return
+	}
 	visible := comments[:0]
 	for _, c := range comments {
 		if c.directive != "endregion" {
@@ -116,6 +133,7 @@ func main() {
 func usage() {
 	fmt.Fprintln(os.Stderr, `Usage:
   codegos <source-file> [--plain | --json]
+  codegos <source-file> tail
   codegos <source-file> go <line-number> [--full] [--plain | --json]
   codegos <source-file> show <start>-<end> [--plain | --json]
 
@@ -128,6 +146,7 @@ Supported extensions in this prototype: .go, .py, .ps1, .psm1, .psd1`)
 }
 
 type cliOptions struct {
+	tail    bool
 	path    string
 	line    int
 	showEnd int
@@ -140,6 +159,10 @@ func parseArgs(args []string) (cliOptions, error) {
 		return cliOptions{}, fmt.Errorf("missing source file")
 	}
 	options := cliOptions{path: args[0]}
+	if len(args) == 2 && args[1] == "tail" {
+		options.tail = true
+		return options, nil
+	}
 	for len(args) > 1 && strings.HasPrefix(args[len(args)-1], "--") {
 		flag := args[len(args)-1]
 		args = args[:len(args)-1]
